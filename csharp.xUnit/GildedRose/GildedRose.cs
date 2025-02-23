@@ -11,7 +11,6 @@ public class GildedRose
     private const string Backstage = "Backstage passes to a TAFKAL80ETC concert";
     private const string AgedBrie = "Aged Brie";
     private const string Conjured = "Conjured Mana Cake";
-    private static readonly HashSet<string> SpecialTreatment = [AgedBrie, Sulfuras, Backstage];
 
     private readonly IList<Item> _items;
 
@@ -43,7 +42,7 @@ public class GildedRose
             HandleSulfuras,
             HandleAgedBrie,
             HandleBackStage,
-            HandleNormalItem
+            HandleNormalItem,
         ];
         var handled = strategies.Any(strategy => strategy(t) == ProcessingResult.Handled);
         if (!handled)
@@ -61,8 +60,9 @@ public class GildedRose
 
     public static ProcessingResult HandleNormalItem(Item item)
     {
+        HashSet<string> specialTreatment = [AgedBrie, Sulfuras, Backstage];
         return Process(item,
-            () => !SpecialTreatment.Contains(item.Name),
+            () => !specialTreatment.Contains(item.Name),
             QualityDecay(-1));
     }
 
