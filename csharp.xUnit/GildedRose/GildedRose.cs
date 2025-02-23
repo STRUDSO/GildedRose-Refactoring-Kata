@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace GildedRoseKata;
 
@@ -38,23 +37,46 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        var next = () => Next(t);
-        HandleSulfuras(t, next);
+        IEnumerable<Action<Item, Action>> actions = [
+            HandleSulfuras,
 
-        static void Next(Item t)
+            Do(SellIn),
+                Do(HandleAgedBrie),
+                Do(HandleBackStage),
+                Do(HandleNormalItem),
+                Do(HandleConjuredItem),
+            Do(EnsureQualityIsInRange)
+
+        ];
+
+        Action next = null;
+        using var enumerator = actions.GetEnumerator();
+        next = () =>
         {
-            List<Func<Item, ProcessingResult>> strategies =
-            [
-                HandleAgedBrie,
-                HandleBackStage,
-                HandleNormalItem,
-                HandleConjuredItem
-            ];
-            if (strategies.All(strategy => strategy(t) != ProcessingResult.Handled))
+            if (enumerator.MoveNext())
             {
-                throw new ApplicationException($"Cannot process {t}");
+                enumerator.Current(t, next);
             }
-        }
+        };
+        next();
+    }
+
+    private static Action<Item, Action> Do(Action<Item> act)
+    {
+        return Do(it =>
+        {
+            act(it);
+            return ProcessingResult.No;
+        });
+    }
+
+    private static Action<Item, Action> Do(Func<Item, ProcessingResult> handleAgedBrie)
+    {
+        return (it, next) =>
+        {
+            handleAgedBrie(it);
+            next();
+        };
     }
 
     public static void HandleSulfuras(Item t, Action next)
@@ -68,35 +90,34 @@ public class GildedRose
         next();
     }
 
-    public static ProcessingResult HandleNormalItem(Item item)
+    public static void HandleNormalItem(Item item)
     {
         HashSet<string> specialTreatment = [AgedBrie, Sulfuras, Backstage, Conjured];
-        return Process(item,
-            () => !specialTreatment.Contains(item.Name),
-            QualityDecay(-1));
+        if (!specialTreatment.Contains(item.Name))
+        {
+            QualityDecay(-1)(item);
+        }
     }
 
-    public static ProcessingResult HandleConjuredItem(Item item)
+    public static void HandleConjuredItem(Item item)
     {
-        return Process(item,
-            () => item.Name == Conjured,
-            QualityDecay(-2));
+        if (item.Name == Conjured)
+        {
+            QualityDecay(-2)(item);
+        }
     }
 
-    public static ProcessingResult HandleAgedBrie(Item item)
+    public static void HandleAgedBrie(Item item)
     {
-        return Process(item,
-            () => item.Name == AgedBrie,
-            QualityDecay(1));
+        if (item.Name == AgedBrie)
+        {
+            QualityDecay(1)(item);
+        }
     }
 
-    public static ProcessingResult HandleBackStage(Item item)
+    public static void HandleBackStage(Item item)
     {
-        return Process(item,
-            () => item.Name == Backstage,
-            HandleBackStageQuality);
-
-        static void HandleBackStageQuality(Item item)
+        if (item.Name == Backstage)
         {
             item.Quality = item.SellIn switch
             {
@@ -121,18 +142,6 @@ public class GildedRose
     }
 
 
-    private static ProcessingResult Process(Item item, Func<bool> handles, Action<Item> qualityDecay)
-    {
-        if (!handles())
-        {
-            return ProcessingResult.No;
-        }
-
-        Action<Item>[] pipeline = [SellIn, qualityDecay, EnsureQualityIsInRange];
-        foreach (var act in pipeline)
-            act(item);
-        return ProcessingResult.Handled;
-    }
     private static void SellIn(Item item)
     {
         item.SellIn -= 1;

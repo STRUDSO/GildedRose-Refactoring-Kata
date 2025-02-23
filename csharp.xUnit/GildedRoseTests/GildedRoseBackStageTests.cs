@@ -6,22 +6,12 @@ namespace GildedRoseTests;
 public class GildedRoseBackStageTests {
 
     [Fact]
-    public void BackstageHandles()
-    {
-        Assert.Equal(ProcessingResult.Handled, GildedRose.HandleBackStage(Any.BackStagePass()));
-
-        Assert.Equal(ProcessingResult.No, GildedRose.HandleBackStage(Any.Sulfuras()));
-        Assert.Equal(ProcessingResult.No, GildedRose.HandleBackStage(Any.AgedBrie()));
-        Assert.Equal(ProcessingResult.No, GildedRose.HandleBackStage(Any.NormalItem()));
-    }
-
-    [Fact]
     public void Backstage_SellIn_ShouldDecrease()
     {
         var item = Any.BackStagePass();
         var sellIn = item.SellIn;
 
-        GildedRose.HandleBackStage(item);
+        UpdateQuality(item);
 
 
         Assert.Equal(sellIn - 1, item.SellIn);
@@ -33,7 +23,7 @@ public class GildedRoseBackStageTests {
         var quality = 10;
         var item = Any.BackStagePass(100, quality);
 
-        GildedRose.HandleBackStage(item);
+        UpdateQuality(item);
 
         Assert.Equal(quality + 1, item.Quality);
     }
@@ -44,7 +34,7 @@ public class GildedRoseBackStageTests {
         var quality = 0;
         var item = Any.BackStagePass(sellIn:10, quality:quality);
 
-        GildedRose.HandleBackStage(item);
+        UpdateQuality(item);
 
         Assert.Equal(quality + 2, item.Quality);
     }
@@ -55,7 +45,7 @@ public class GildedRoseBackStageTests {
         var quality = 0;
         var item = Any.BackStagePass(sellIn:5, quality:quality);
 
-        GildedRose.HandleBackStage(item);
+        UpdateQuality(item);
 
         Assert.Equal(quality + 3, item.Quality);
     }
@@ -66,7 +56,7 @@ public class GildedRoseBackStageTests {
         var quality = 0;
         var item = Any.BackStagePass(sellIn:0, quality:quality);
 
-        GildedRose.HandleBackStage(item);
+        UpdateQuality(item);
 
         Assert.Equal(0, item.Quality);
     }
@@ -77,9 +67,14 @@ public class GildedRoseBackStageTests {
         var quality = 50;
         var item = Any.BackStagePass(sellIn:1, quality:quality);
 
-        GildedRose.HandleBackStage(item);
+        UpdateQuality(item);
 
         Assert.Equal(50, item.Quality);
+    }
+
+    private static void UpdateQuality(Item item)
+    {
+        new GildedRose([item]).UpdateQuality();
     }
 
 }

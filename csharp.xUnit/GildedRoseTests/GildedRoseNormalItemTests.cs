@@ -29,7 +29,7 @@ public abstract class GildedRoseSimpleItemTests(int qualityModifier = 1)
         // Given
         var sellIn = 1;
         var quality = 10;
-        var item = CreateItem(sellIn:sellIn, quality:quality);
+        var item = CreateItem(sellIn: sellIn, quality: quality);
 
         // When
         Handle(item);
@@ -73,7 +73,7 @@ public class GildedRoseSimpleItemTests_ConjuredItems() : GildedRoseSimpleItemTes
     [Fact]
     public void SellInQualityCloseToZero()
     {
-        var conjuredItem = Any.ConjuredItem(1,4);
+        var conjuredItem = Any.ConjuredItem(1, 4);
 
         Handle(conjuredItem);
 
@@ -82,7 +82,7 @@ public class GildedRoseSimpleItemTests_ConjuredItems() : GildedRoseSimpleItemTes
 
     protected override void Handle(Item item)
     {
-        GildedRose.HandleConjuredItem(item);
+        new GildedRose([item]).UpdateQuality();
     }
 }
 
@@ -90,22 +90,12 @@ public class GildedRoseSimpleItemTest_NormalItems : GildedRoseSimpleItemTests
 {
     protected override Item CreateItem(int sellIn = 0, int quality = 0)
     {
-        var item = Any.NormalItem(sellIn:sellIn, quality:quality);
+        var item = Any.NormalItem(sellIn: sellIn, quality: quality);
         return item;
     }
 
     protected override void Handle(Item item)
     {
-        GildedRose.HandleNormalItem(item);
-    }
-
-    [Fact]
-    public void Normal_SpecialItem_ShouldReplyNo()
-    {
-        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.Sulfuras()));
-        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.BackStagePass()));
-        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.AgedBrie()));
-        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.ConjuredItem()));
-        Assert.Equal(ProcessingResult.Handled, GildedRose.HandleNormalItem(Any.NormalItem()));
+        new GildedRose([item]).UpdateQuality();
     }
 }
