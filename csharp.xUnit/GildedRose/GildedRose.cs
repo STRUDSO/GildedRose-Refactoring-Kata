@@ -38,7 +38,12 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        List<Func<Item, ProcessingResult>> strategies = [HandleSulfuras, HandleAgedBrie, HandleBackStage, HandleNormalItem];
+        List<Func<Item, ProcessingResult>> strategies = [
+            HandleSulfuras,
+            HandleAgedBrie,
+            HandleBackStage,
+            HandleNormalItem
+        ];
         var handled = strategies.Any(strategy => strategy(t) == ProcessingResult.Handled);
         if (!handled)
         {
@@ -55,18 +60,23 @@ public class GildedRose
 
     public static ProcessingResult HandleNormalItem(Item item)
     {
-        return Process(item, () => !SpecialTreatment.Contains(item.Name), NormalQuality);
+        return Process(item,
+            () => !SpecialTreatment.Contains(item.Name),
+            QualityDecay(1));
+    }
 
-        static void NormalQuality(Item item)
+    static Action<Item> QualityDecay(int qualityDelta)
+    {
+        return item =>
         {
             item.Quality = item.SellIn switch
             {
-                < 0 => item.Quality - 2,
-                _ => item.Quality - 1
+                < 0 => item.Quality - qualityDelta * 2,
+                _ => item.Quality - qualityDelta
             };
-        }
-
+        };
     }
+
 
     public static ProcessingResult HandleAgedBrie(Item item)
     {
