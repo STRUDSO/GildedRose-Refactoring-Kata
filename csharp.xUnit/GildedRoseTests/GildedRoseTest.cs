@@ -8,19 +8,23 @@ namespace GildedRoseTests;
 
 public class GildedRoseTest
 {
-    [Fact]
-    public void SellInShouldDecrease()
+    private readonly int sellIn;
+    private readonly Item item;
+
+    public GildedRoseTest()
     {
         // Given
-        var sellIn = 0;
-        var item = new Item { Name = "foo", SellIn = sellIn, Quality = 0 };
+        sellIn = 0;
+        item = new Item { Name = "foo", SellIn = sellIn, Quality = 0 };
         GildedRose app = new GildedRose([item]);
 
         // When
         app.UpdateQuality();
-
+    }
+    [Fact]
+    public void SellInShouldDecrease()
+    {
         // Then
-        Assert.Equal(sellIn - 1, item.SellIn);
         Assert.Equal(sellIn - 1, item.SellIn);
     }
 }
