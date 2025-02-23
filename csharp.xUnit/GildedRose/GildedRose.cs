@@ -48,37 +48,26 @@ public class GildedRose
         bool isAgedBrie = IsNamed(t, AgedBrie);
 
 
-        var isNormalItem = !(isAgedBrie || isBackStage);
 
-        if (isNormalItem)
+        if (t.Quality < 50)
         {
-            if (0 < t.Quality)
-            {
-                t.Quality -= 1;
-            }
-        }
-        else
-        {
-            if (t.Quality < 50)
-            {
-                t.Quality += 1;
+            t.Quality += 1;
 
-                if (isBackStage)
+            if (isBackStage)
+            {
+                if (t.SellIn < 11)
                 {
-                    if (t.SellIn < 11)
+                    if (t.Quality < 50)
                     {
-                        if (t.Quality < 50)
-                        {
-                            t.Quality += 1;
-                        }
+                        t.Quality += 1;
                     }
+                }
 
-                    if (t.SellIn < 6)
+                if (t.SellIn < 6)
+                {
+                    if (t.Quality < 50)
                     {
-                        if (t.Quality < 50)
-                        {
-                            t.Quality += 1;
-                        }
+                        t.Quality += 1;
                     }
                 }
             }
@@ -98,13 +87,6 @@ public class GildedRose
             else if (isBackStage)
             {
                 t.Quality = 0;
-            }
-            else if(isNormalItem)
-            {
-                if (0 < t.Quality)
-                {
-                    t.Quality -= 1;
-                }
             }
         }
     }
