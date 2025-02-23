@@ -1,6 +1,6 @@
 ﻿namespace GildedRoseKata;
 
-public class Item
+public record Item
 {
     public string Name { get; set; }
     public int SellIn { get; set; }

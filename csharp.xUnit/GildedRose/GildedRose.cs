@@ -16,10 +16,15 @@ public class GildedRose
     {
         foreach (var t in Items)
         {
+            var qualityBefore = t.Quality;
             ProcessItem(t);
 
             //Assertions
             Debug.Assert(0 <= t.Quality, "The Quality of an item is never negative");
+            if (qualityBefore <= 50) //Just for clarification, an item can never have its Quality increase above 50, however "Sulfuras" is a legendary item and as such its Quality is 80 and it never alters.
+            {
+                Debug.Assert(t.Quality <= 50, "The Quality of an item is never more than 50", t.ToString());
+            }
         }
     }
 
