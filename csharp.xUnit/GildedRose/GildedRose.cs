@@ -45,7 +45,7 @@ public class GildedRose
         Func<bool> isAgedBrie = HasName("Aged Brie", t);
 
 
-        if (!isAgedBrie() && !isBackStage())
+        if (!(isAgedBrie() || isBackStage()))
         {
             if (t.Quality > 0)
             {
