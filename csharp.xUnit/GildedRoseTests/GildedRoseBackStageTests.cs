@@ -77,7 +77,7 @@ public class GildedRoseBackStageTests {
         var quality = 50;
         var item = Any.BackStagePass(sellIn:1, quality:quality);
 
-        new GildedRose([item]).UpdateQuality();
+        GildedRose.HandleBackStage(item);
 
         Assert.Equal(50, item.Quality);
     }

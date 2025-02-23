@@ -139,26 +139,27 @@ public class GildedRose
         return ProcessingResult.Handled;
     }
 
-    public static ProcessingResult HandleBackStage(Item backStagePass)
+    public static ProcessingResult HandleBackStage(Item item)
     {
-        if (backStagePass.Name != Backstage)
+        if (item.Name != Backstage)
         {
             return ProcessingResult.No;
         }
 
-        backStagePass.SellIn -= 1;
-        backStagePass.Quality += 1;
+        item.SellIn -= 1;
+        item.Quality += 1;
 
-        if (backStagePass.SellIn < 10)
+        if (item.SellIn < 10)
         {
-            backStagePass.Quality += 1;
+            item.Quality += 1;
         }
 
-        if (backStagePass.SellIn < 5)
+        if (item.SellIn < 5)
         {
-            backStagePass.Quality += 1;
+            item.Quality += 1;
         }
 
+        item.Quality = Math.Min(50, item.Quality);
         return ProcessingResult.Handled;
     }
 }
