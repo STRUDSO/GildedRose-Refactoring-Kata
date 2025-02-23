@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace GildedRoseKata;
 
@@ -33,10 +34,9 @@ public class GildedRose
     private static void ProcessItem(Item t)
     {
         List<Func<Item, ProcessingResult>> strategies = [HandleSulfuras];
-        foreach (var strategy in strategies)
+        if (strategies.Any(strategy => strategy(t) == ProcessingResult.Handled))
         {
-            if (strategy(t) == ProcessingResult.Handled)
-                return;
+            return;
         }
 
         Func<bool> isBackStage = HasName("Backstage passes to a TAFKAL80ETC concert", t);
