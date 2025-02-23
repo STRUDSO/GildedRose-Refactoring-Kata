@@ -22,3 +22,10 @@ GildedRose/bin/Debug/net8.0/GildedRose 10
 ``` cmd
 dotnet test
 ```
+
+## TCR :)
+
+```zsh
+dotnet build && (dotnet test --no-build && git commit -am "$(git diff | fabric -p create_git_diff_commit_message -m deepseek-coder-v2:16b)" || git reset --hard)
+
+```
