@@ -6,6 +6,12 @@ namespace GildedRoseTests;
 public class GildedRoseBackStageTests {
 
     [Fact]
+    public void BackstageHandles()
+    {
+        Assert.Equal(ProcessingResult.Handled, GildedRose.HandleBackStage(Any.BackStagePass()));
+    }
+
+    [Fact]
     public void BackStagePasses_10DaysOrLess_QualityBy2()
     {
         var quality = 0;

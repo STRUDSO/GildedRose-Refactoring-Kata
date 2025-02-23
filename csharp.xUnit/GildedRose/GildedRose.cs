@@ -138,6 +138,11 @@ public class GildedRose
         item.Quality = Math.Min(50, item.Quality);
         return ProcessingResult.Handled;
     }
+
+    public static ProcessingResult HandleBackStage(Item backStagePass)
+    {
+        return ProcessingResult.Handled;
+    }
 }
 
 public enum ProcessingResult
