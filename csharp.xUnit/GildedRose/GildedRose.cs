@@ -34,7 +34,7 @@ public class GildedRose
         var noop = (Item _) => { };
 
         // so ..._last(third_last(second_last(noop())))
-        return reversed.Aggregate(noop, (next, rhs) => item => rhs(item, next));
+        return reversed.Aggregate(noop, (next, current) => item => current(item, next));
     }
 
     private const string Sulfuras = "Sulfuras, Hand of Ragnaros";
