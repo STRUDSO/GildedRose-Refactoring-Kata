@@ -9,7 +9,7 @@ namespace GildedRoseTests;
 public class GildedRoseTest
 {
     [Fact]
-    public void SellInShouldDecrease()
+    public void NormalItem_DayPassed_ShouldDecreaseSellIn()
     {
         // Given
         var sellIn = 0;
@@ -23,7 +23,7 @@ public class GildedRoseTest
     }
 
     [Fact]
-    public void QualityShouldNotGoBelow0()
+    public void NormalItem_DayPassed_QualityNotBelowZero()
     {
         // Given
         var item = Any.NormalItem();
