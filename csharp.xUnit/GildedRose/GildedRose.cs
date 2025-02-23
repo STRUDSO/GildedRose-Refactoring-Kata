@@ -19,7 +19,7 @@ public class GildedRose
             ProcessItem(t);
 
             //Assertions
-            // Debug.Assert(0 < t.Quality, "The Quality of an item is never negative");
+            Debug.Assert(0 <= t.Quality, "The Quality of an item is never negative");
         }
     }
 
