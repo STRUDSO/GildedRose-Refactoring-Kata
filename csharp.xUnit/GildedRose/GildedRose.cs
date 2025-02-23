@@ -39,56 +39,7 @@ public class GildedRose
     private static void ProcessItem(Item t)
     {
         List<Func<Item, ProcessingResult>> strategies = [HandleSulfuras, HandleAgedBrie, HandleBackStage, HandleNormalItem];
-        if (strategies.Any(strategy => strategy(t) == ProcessingResult.Handled))
-        {
-            return;
-        }
-
-        bool isBackStage = IsNamed(t, Backstage);
-        bool isAgedBrie = IsNamed(t, AgedBrie);
-
-
-
-        if (t.Quality < 50)
-        {
-            t.Quality += 1;
-
-            if (isBackStage)
-            {
-                if (t.SellIn < 11)
-                {
-                    if (t.Quality < 50)
-                    {
-                        t.Quality += 1;
-                    }
-                }
-
-                if (t.SellIn < 6)
-                {
-                    if (t.Quality < 50)
-                    {
-                        t.Quality += 1;
-                    }
-                }
-            }
-        }
-
-        t.SellIn -= 1;
-
-        if (t.SellIn < 0)
-        {
-            if (isAgedBrie)
-            {
-                if (t.Quality < 50)
-                {
-                    t.Quality += 1;
-                }
-            }
-            else if (isBackStage)
-            {
-                t.Quality = 0;
-            }
-        }
+        _ = strategies.Any(strategy => strategy(t) == ProcessingResult.Handled);
     }
 
     private static bool IsNamed(Item item, string name)
