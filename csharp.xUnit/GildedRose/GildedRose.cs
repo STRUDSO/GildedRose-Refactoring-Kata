@@ -42,11 +42,6 @@ public class GildedRose
         _ = strategies.Any(strategy => strategy(t) == ProcessingResult.Handled);
     }
 
-    private static bool IsNamed(Item item, string name)
-    {
-        return item.Name == name;
-    }
-
     public static ProcessingResult HandleSulfuras(Item t)
     {
         return t.Name == Sulfuras ?
@@ -61,13 +56,13 @@ public class GildedRose
             return ProcessingResult.No;
         }
 
-        item.Quality -= 1;
         item.SellIn -= 1;
 
-        if (item.SellIn < 0)
+        item.Quality = item.SellIn switch
         {
-            item.Quality -= 1;
-        }
+            < 0 => item.Quality - 2,
+            _ => item.Quality - 1
+        };
 
         EnsureQualityIsInRange(item);
         return ProcessingResult.Handled;
@@ -78,13 +73,13 @@ public class GildedRose
         if (item.Name != AgedBrie)
             return ProcessingResult.No;
 
-        item.Quality += 1;
         item.SellIn -= 1;
 
-        if (item.SellIn < 0)
+        item.Quality = item.SellIn switch
         {
-            item.Quality += 1;
-        }
+            < 0 => item.Quality + 2,
+            _ => item.Quality + 1
+        };
 
         EnsureQualityIsInRange(item);
         return ProcessingResult.Handled;
@@ -98,22 +93,14 @@ public class GildedRose
         }
 
         item.SellIn -= 1;
-        item.Quality += 1;
 
-        if (item.SellIn < 10)
+        item.Quality = item.SellIn switch
         {
-            item.Quality += 1;
-        }
-
-        if (item.SellIn < 5)
-        {
-            item.Quality += 1;
-        }
-
-        if (item.SellIn < 0)
-        {
-            item.Quality = 0;
-        }
+            < 0 => 0,
+            < 5 => item.Quality + 3,
+            < 10 => item.Quality + 2,
+            _ => item.Quality + 1
+        };
 
         EnsureQualityIsInRange(item);
         return ProcessingResult.Handled;
