@@ -1,7 +1,4 @@
-﻿using System;
-using Xunit;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using Xunit;
 using GildedRoseKata;
 
 namespace GildedRoseTests;
@@ -66,5 +63,18 @@ public class GildedRoseTest
         new GildedRose([item]).UpdateQuality();
 
         Assert.Equal(quality + 2, item.Quality);
+    }
+
+    [Fact]
+    public void Sulfuras()
+    {
+        var item = Any.Sulfuras();
+        var itemQuality = item.Quality;
+        var itemSellIn = item.SellIn;
+
+        new GildedRose([item]).UpdateQuality();
+
+        Assert.Equal(itemQuality, item.Quality);
+        Assert.Equal(itemSellIn, item.SellIn);
     }
 }

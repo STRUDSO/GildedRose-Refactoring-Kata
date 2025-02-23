@@ -13,4 +13,9 @@ public class Any
     {
         return NormalItem("Aged Brie", quality:quality, sellIn:sellIn);
     }
+
+    public static Item Sulfuras()
+    {
+        return NormalItem("Sulfuras, Hand of Ragnaros", quality:80);
+    }
 }
