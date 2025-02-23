@@ -45,8 +45,7 @@ public class GildedRose
             HandleNormalItem,
             HandleConjuredItem
         ];
-        var handled = strategies.Any(strategy => strategy(t) == ProcessingResult.Handled);
-        if (!handled)
+        if (strategies.All(strategy => strategy(t) != ProcessingResult.Handled))
         {
             throw new ApplicationException($"Cannot process {t}");
         }
@@ -83,16 +82,18 @@ public class GildedRose
 
     public static ProcessingResult HandleBackStage(Item item)
     {
-        return Process(item, () => item.Name == Backstage, HandleBackStageQuality);
+        return Process(item,
+            () => item.Name == Backstage,
+            HandleBackStageQuality);
 
-        static void HandleBackStageQuality(Item item1)
+        static void HandleBackStageQuality(Item item)
         {
-            item1.Quality = item1.SellIn switch
+            item.Quality = item.SellIn switch
             {
                 < 0 => 0,
-                < 5 => item1.Quality + 3,
-                < 10 => item1.Quality + 2,
-                _ => item1.Quality + 1
+                < 5 => item.Quality + 3,
+                < 10 => item.Quality + 2,
+                _ => item.Quality + 1
             };
         }
     }
