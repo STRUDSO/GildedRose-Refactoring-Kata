@@ -34,4 +34,15 @@ public class GildedRoseAgedBrieTests
 
         Assert.Equal(quality + 2, item.Quality);
     }
+
+    [Fact]
+    public void AgedBrie_DayPassed_ShouldDecreaseSellIn()
+    {
+        var item = Any.AgedBrie();
+        var sellIn = item.SellIn;
+
+        GildedRose.HandleAgedBrie(item);
+
+        Assert.Equal(sellIn - 1, item.SellIn);
+    }
 }
