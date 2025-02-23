@@ -61,18 +61,19 @@ public class GildedRose
 
     private static ProcessingResult Process(Item item, Action<Item> normalQuality)
     {
-        Apply(SellIn, item);
+        Apply(item, SellIn);
 
-        Apply(normalQuality, item);
+        Apply(item, normalQuality);
 
-        Apply(EnsureQualityIsInRange, item);
+        Apply(item, EnsureQualityIsInRange);
 
         return ProcessingResult.Handled;
     }
 
-    private static void Apply(Action<Item> normalQuality, Item item)
+    private static void Apply(Item item, params Action<Item>[] normalQuality)
     {
-        normalQuality(item);
+        foreach (var q in normalQuality)
+            q(item);
     }
 
     private static void NormalQuality(Item item)
