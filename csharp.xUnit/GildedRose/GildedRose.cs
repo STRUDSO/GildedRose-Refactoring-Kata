@@ -33,8 +33,9 @@ public class GildedRose
         var isBackStage = t.Name == "Backstage passes to a TAFKAL80ETC concert";
         var notBackStage = !isBackStage;
         var notSulfuras = t.Name != "Sulfuras, Hand of Ragnaros";
+        var notAgedBrie = t.Name != "Aged Brie";
 
-        if (t.Name != "Aged Brie" && notBackStage)
+        if (notAgedBrie && notBackStage)
         {
             if (t.Quality > 0)
             {
@@ -78,7 +79,7 @@ public class GildedRose
 
         if (t.SellIn < 0)
         {
-            if (t.Name != "Aged Brie")
+            if (notAgedBrie)
             {
                 if (notBackStage)
                 {
