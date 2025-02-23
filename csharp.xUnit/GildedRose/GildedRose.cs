@@ -135,7 +135,7 @@ public class GildedRose
             item.Quality += 1;
         }
 
-        item.Quality = EnsureQualityRange(item);
+        EnsureQualityRange(item);
         return ProcessingResult.Handled;
     }
 
@@ -159,13 +159,14 @@ public class GildedRose
             item.Quality += 1;
         }
 
-        item.Quality = EnsureQualityRange(item);
+        EnsureQualityRange(item);
         return ProcessingResult.Handled;
     }
 
-    private static int EnsureQualityRange(Item item)
+    private static void EnsureQualityRange(Item item)
     {
-        return Math.Min(50, item.Quality);
+        var ensureQualityRange = Math.Min(50, item.Quality);
+        item.Quality = ensureQualityRange;
     }
 }
 
