@@ -78,5 +78,15 @@ public class GildedRoseTest
         Assert.Equal(itemSellIn, item.SellIn);
     }
 
+    [Fact]
+    public void BackStagePasses_10DaysOrLess_QualityBy2()
+    {
+        var quality = 0;
+        var item = Any.BackStagePass(sellIn:10, quality:quality);
+
+        new GildedRose([item]).UpdateQuality();
+
+        Assert.Equal(quality + 2, item.Quality);
+    }
 
 }

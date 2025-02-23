@@ -16,6 +16,13 @@ public class Any
 
     public static Item Sulfuras()
     {
-        return NormalItem("Sulfuras, Hand of Ragnaros", quality:80);
+        const string name = "Sulfuras, Hand of Ragnaros";
+        return NormalItem(name, quality:80);
+    }
+
+    public static Item BackStagePass(int sellIn, int quality)
+    {
+        const string name = "Backstage passes to a TAFKAL80ETC concert";
+        return NormalItem(name, sellIn:sellIn, quality:quality);
     }
 }
