@@ -1,4 +1,3 @@
-using System;
 using GildedRoseKata;
 using Xunit;
 

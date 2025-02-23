@@ -117,12 +117,12 @@ public class GildedRose
     {
         if (item.Name == Backstage)
         {
-            item.Quality = item.SellIn switch
+            item.Quality += item.SellIn switch
             {
-                < 0 => 0,
-                < 5 => item.Quality + 3,
-                < 10 => item.Quality + 2,
-                _ => item.Quality + 1
+                < 0 => -item.Quality,
+                < 5 => 3,
+                < 10 => 2,
+                _ => 1
             };
         }
     }
@@ -131,10 +131,10 @@ public class GildedRose
     {
         return item =>
         {
-            item.Quality = item.SellIn switch
+            item.Quality += item.SellIn switch
             {
-                < 0 => item.Quality + qualityDelta * 2,
-                _ => item.Quality + qualityDelta
+                < 0 => qualityDelta * 2,
+                _ => qualityDelta
             };
         };
     }
