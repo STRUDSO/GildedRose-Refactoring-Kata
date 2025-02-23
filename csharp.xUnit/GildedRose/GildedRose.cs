@@ -56,16 +56,37 @@ public class GildedRose
             return ProcessingResult.No;
         }
 
-        item.SellIn -= 1;
+        return Process(item, NormalQuality);
+    }
 
+    private static ProcessingResult Process(Item item, Action<Item> normalQuality)
+    {
+        SellIn(item);
+
+        Apply(normalQuality, item);
+
+        EnsureQualityIsInRange(item);
+
+        return ProcessingResult.Handled;
+    }
+
+    private static void Apply(Action<Item> normalQuality, Item item)
+    {
+        normalQuality(item);
+    }
+
+    private static void NormalQuality(Item item)
+    {
         item.Quality = item.SellIn switch
         {
             < 0 => item.Quality - 2,
             _ => item.Quality - 1
         };
+    }
 
-        EnsureQualityIsInRange(item);
-        return ProcessingResult.Handled;
+    private static void SellIn(Item item)
+    {
+        item.SellIn -= 1;
     }
 
     public static ProcessingResult HandleAgedBrie(Item item)
