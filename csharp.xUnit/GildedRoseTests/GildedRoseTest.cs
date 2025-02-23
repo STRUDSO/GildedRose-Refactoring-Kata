@@ -1,5 +1,7 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using GildedRoseKata;
 
 namespace GildedRoseTests;
@@ -7,11 +9,14 @@ namespace GildedRoseTests;
 public class GildedRoseTest
 {
     [Fact]
-    public void foo()
+    public void SellInShouldDecrease()
     {
-        IList<Item> Items = new List<Item> { new Item { Name = "foo", SellIn = 0, Quality = 0 } };
-        GildedRose app = new GildedRose(Items);
+        var sellIn = 0;
+        var item = new Item { Name = "foo", SellIn = sellIn, Quality = 0 };
+        IList<Item> items = [item];
+        GildedRose app = new GildedRose(items);
         app.UpdateQuality();
-        Assert.Equal("fixme", Items[0].Name);
+
+        Assert.Equal(sellIn - 1, item.SellIn);
     }
 }
