@@ -159,6 +159,11 @@ public class GildedRose
             item.Quality += 1;
         }
 
+        if (item.SellIn < 0)
+        {
+            item.Quality = 0;
+        }
+
         EnsureQualityRange(item);
         return ProcessingResult.Handled;
     }
