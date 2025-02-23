@@ -37,16 +37,22 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        IEnumerable<Action<Item, Action>> actions = [
+        IEnumerable<Action<Item, Action>> actions =
+        [
             HandleSulfuras,
 
-            Do(SellIn),
-                Do(HandleAgedBrie),
-                Do(HandleBackStage),
-                Do(HandleNormalItem),
-                Do(HandleConjuredItem),
-            Do(EnsureQualityIsInRange)
+            Do(item => item.SellIn -= 1),
 
+            Do(HandleAgedBrie),
+            Do(HandleBackStage),
+            Do(HandleNormalItem),
+            Do(HandleConjuredItem),
+
+            Do(item =>
+            {
+                var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
+                item.Quality = ensureQualityRange;
+            })
         ];
 
         Action next = null;
@@ -63,18 +69,9 @@ public class GildedRose
 
     private static Action<Item, Action> Do(Action<Item> act)
     {
-        return Do(it =>
-        {
-            act(it);
-            return ProcessingResult.No;
-        });
-    }
-
-    private static Action<Item, Action> Do(Func<Item, ProcessingResult> handleAgedBrie)
-    {
         return (it, next) =>
         {
-            handleAgedBrie(it);
+            act(it);
             next();
         };
     }
@@ -90,7 +87,7 @@ public class GildedRose
         next();
     }
 
-    public static void HandleNormalItem(Item item)
+    private static void HandleNormalItem(Item item)
     {
         HashSet<string> specialTreatment = [AgedBrie, Sulfuras, Backstage, Conjured];
         if (!specialTreatment.Contains(item.Name))
@@ -99,7 +96,7 @@ public class GildedRose
         }
     }
 
-    public static void HandleConjuredItem(Item item)
+    private static void HandleConjuredItem(Item item)
     {
         if (item.Name == Conjured)
         {
@@ -107,7 +104,7 @@ public class GildedRose
         }
     }
 
-    public static void HandleAgedBrie(Item item)
+    private static void HandleAgedBrie(Item item)
     {
         if (item.Name == AgedBrie)
         {
@@ -115,7 +112,7 @@ public class GildedRose
         }
     }
 
-    public static void HandleBackStage(Item item)
+    private static void HandleBackStage(Item item)
     {
         if (item.Name == Backstage)
         {
@@ -140,22 +137,4 @@ public class GildedRose
             };
         };
     }
-
-
-    private static void SellIn(Item item)
-    {
-        item.SellIn -= 1;
-    }
-
-    private static void EnsureQualityIsInRange(Item item)
-    {
-        var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
-        item.Quality = ensureQualityRange;
-    }
-}
-
-public enum ProcessingResult
-{
-    Handled,
-    No
 }
