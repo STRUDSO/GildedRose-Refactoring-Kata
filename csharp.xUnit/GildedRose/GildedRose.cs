@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace GildedRoseKata;
@@ -30,16 +31,15 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        var isBackStage = t.Name == "Backstage passes to a TAFKAL80ETC concert";
-        var notBackStage = !isBackStage;
-        var notSulfuras = t.Name != "Sulfuras, Hand of Ragnaros";
-        var notAgedBrie = t.Name != "Aged Brie";
+        Func<bool> isBackStage = () =>  t.Name == "Backstage passes to a TAFKAL80ETC concert";
+        Func<bool> isSulfuras = () => t.Name == "Sulfuras, Hand of Ragnaros";
+        Func<bool> isAgedBrie = () => t.Name == "Aged Brie";
 
-        if (notAgedBrie && notBackStage)
+        if (!isAgedBrie() && !isBackStage())
         {
             if (t.Quality > 0)
             {
-                if (notSulfuras)
+                if (!isSulfuras())
                 {
                     t.Quality -= 1;
                 }
@@ -51,7 +51,7 @@ public class GildedRose
             {
                 t.Quality += 1;
 
-                if (isBackStage)
+                if (isBackStage())
                 {
                     if (t.SellIn < 11)
                     {
@@ -72,20 +72,20 @@ public class GildedRose
             }
         }
 
-        if (notSulfuras)
+        if (!isSulfuras())
         {
             t.SellIn -= 1;
         }
 
         if (t.SellIn < 0)
         {
-            if (notAgedBrie)
+            if (!isAgedBrie())
             {
-                if (notBackStage)
+                if (!isBackStage())
                 {
                     if (t.Quality > 0)
                     {
-                        if (notSulfuras)
+                        if (!isSulfuras())
                         {
                             t.Quality -= 1;
                         }
