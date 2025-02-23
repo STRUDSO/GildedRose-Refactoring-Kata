@@ -31,8 +31,8 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        Func<bool> HasName(string name) => () => t.Name == name;
-        Func<bool> isSulfuras = HasName("Sulfuras, Hand of Ragnaros");
+        Func<bool> HasName(string name, Item item) => () => item.Name == name;
+        Func<bool> isSulfuras = HasName("Sulfuras, Hand of Ragnaros", t);
 
         if (isSulfuras())
         {
@@ -40,8 +40,8 @@ public class GildedRose
             return;
         }
 
-        Func<bool> isBackStage = HasName("Backstage passes to a TAFKAL80ETC concert");
-        Func<bool> isAgedBrie = HasName("Aged Brie");
+        Func<bool> isBackStage = HasName("Backstage passes to a TAFKAL80ETC concert", t);
+        Func<bool> isAgedBrie = HasName("Aged Brie", t);
 
 
         if (!isAgedBrie() && !isBackStage())
@@ -82,31 +82,27 @@ public class GildedRose
 
         if (t.SellIn < 0)
         {
-            PastSellDate(t, isAgedBrie, isBackStage);
-        }
-    }
+            var agedBrie = isAgedBrie();
+            var backStage = isBackStage();
 
-    private static void PastSellDate(Item t, Func<bool> isAgedBrie, Func<bool> isBackStage)
-    {
-        if (isAgedBrie())
-        {
-            if (t.Quality < 50)
+            if (agedBrie)
             {
-                t.Quality += 1;
+                if (t.Quality < 50)
+                {
+                    t.Quality += 1;
+                }
+            } else
+            if (backStage)
+            {
+                t.Quality -= t.Quality;
             }
-
-            return;
-        }
-
-        if (isBackStage())
-        {
-            t.Quality -= t.Quality;
-            return;
-        }
-
-        if (t.Quality > 0)
-        {
-            t.Quality -= 1;
+            else
+            {
+                if (t.Quality > 0)
+                {
+                    t.Quality -= 1;
+                }
+            }
         }
     }
 }
