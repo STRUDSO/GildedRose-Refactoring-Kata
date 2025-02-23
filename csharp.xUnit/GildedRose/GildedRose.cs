@@ -120,6 +120,13 @@ public class GildedRose
     {
         t.Quality -= 1;
         t.SellIn -= 1;
+
+        if (t.SellIn < 0)
+        {
+            t.Quality -= 1;
+        }
+
+        t.Quality = Math.Max(t.Quality, 0);
         return ProcessingResult.Handled;
     }
 
