@@ -16,6 +16,17 @@ public class GildedRoseBackStageTests {
     }
 
     [Fact]
+    public void BackStagePasses_MoreThan10Days_QualityBy1()
+    {
+        var quality = 10;
+        var item = Any.BackStagePass(100, quality);
+
+        GildedRose.HandleBackStage(item);
+
+        Assert.Equal(quality + 1, item.Quality);
+    }
+
+    [Fact]
     public void BackStagePasses_10DaysOrLess_QualityBy2()
     {
         var quality = 0;

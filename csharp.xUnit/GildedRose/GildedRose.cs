@@ -145,6 +145,9 @@ public class GildedRose
         {
             return ProcessingResult.No;
         }
+
+        backStagePass.Quality += 1;
+
         return ProcessingResult.Handled;
     }
 }
