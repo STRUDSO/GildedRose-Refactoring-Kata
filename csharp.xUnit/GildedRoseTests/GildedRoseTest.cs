@@ -13,7 +13,7 @@ public class GildedRoseTest
         var item = Any.NormalItem(sellIn:sellIn);
 
         // When
-        new GildedRose([item]).UpdateQuality();
+        GildedRose.HandleNormalItem(item);
 
         // Then
         Assert.Equal(sellIn - 1, item.SellIn);

@@ -116,6 +116,12 @@ public class GildedRose
             ProcessingResult.Handled : ProcessingResult.No;
     }
 
+    public static ProcessingResult HandleNormalItem(Item t)
+    {
+        t.SellIn -= 1;
+        return ProcessingResult.Handled;
+    }
+
     public enum ProcessingResult
     {
         Handled,
