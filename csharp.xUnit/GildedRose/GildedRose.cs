@@ -55,12 +55,7 @@ public class GildedRose
 
     public static ProcessingResult HandleNormalItem(Item item)
     {
-        if (SpecialTreatment.Contains(item.Name))
-        {
-            return ProcessingResult.No;
-        }
-
-        return Process(item, NormalQuality);
+        return Process(item, NormalQuality, () => SpecialTreatment.Contains(item.Name));
 
         static void NormalQuality(Item item)
         {
@@ -75,10 +70,7 @@ public class GildedRose
 
     public static ProcessingResult HandleAgedBrie(Item item)
     {
-        if (item.Name != AgedBrie)
-            return ProcessingResult.No;
-
-        return Process(item, HandleBrieQuality);
+        return Process(item, HandleBrieQuality, () => item.Name != AgedBrie);
 
         static void HandleBrieQuality(Item item)
         {
@@ -92,11 +84,7 @@ public class GildedRose
 
     public static ProcessingResult HandleBackStage(Item item)
     {
-        if (item.Name != Backstage)
-        {
-            return ProcessingResult.No;
-        }
-        return Process(item, HandleBackStageQuality);
+        return Process(item, HandleBackStageQuality, () => item.Name != Backstage);
 
         static void HandleBackStageQuality(Item item1)
         {
@@ -111,8 +99,12 @@ public class GildedRose
     }
 
 
-    private static ProcessingResult Process(Item item, Action<Item> normalQuality)
+    private static ProcessingResult Process(Item item, Action<Item> normalQuality, Func<bool> dontProcess)
     {
+        if (dontProcess())
+        {
+            return ProcessingResult.No;
+        }
         Apply(item, SellIn, normalQuality, EnsureQualityIsInRange);
         return ProcessingResult.Handled;
     }
