@@ -38,7 +38,7 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        List<Func<Item, ProcessingResult>> strategies = [HandleSulfuras, HandleAgedBrie, HandleNormalItem];
+        List<Func<Item, ProcessingResult>> strategies = [HandleSulfuras, HandleAgedBrie, HandleBackStage, HandleNormalItem];
         if (strategies.Any(strategy => strategy(t) == ProcessingResult.Handled))
         {
             return;
@@ -118,7 +118,7 @@ public class GildedRose
             item.Quality -= 1;
         }
 
-        EnsureQualityRange(item);
+        EnsureQualityIsInRange(item);
         return ProcessingResult.Handled;
     }
 
@@ -135,7 +135,7 @@ public class GildedRose
             item.Quality += 1;
         }
 
-        EnsureQualityRange(item);
+        EnsureQualityIsInRange(item);
         return ProcessingResult.Handled;
     }
 
@@ -164,11 +164,11 @@ public class GildedRose
             item.Quality = 0;
         }
 
-        EnsureQualityRange(item);
+        EnsureQualityIsInRange(item);
         return ProcessingResult.Handled;
     }
 
-    private static void EnsureQualityRange(Item item)
+    private static void EnsureQualityIsInRange(Item item)
     {
         var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
         item.Quality = ensureQualityRange;
