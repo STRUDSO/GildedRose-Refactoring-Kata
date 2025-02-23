@@ -30,7 +30,9 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        if (t.Name != "Aged Brie" && t.Name != "Backstage passes to a TAFKAL80ETC concert")
+        const string backStage = "Backstage passes to a TAFKAL80ETC concert";
+        var notBackStage = t.Name != backStage;
+        if (t.Name != "Aged Brie" && notBackStage)
         {
             if (t.Quality > 0)
             {
@@ -46,7 +48,7 @@ public class GildedRose
             {
                 t.Quality += 1;
 
-                if (t.Name == "Backstage passes to a TAFKAL80ETC concert")
+                if (t.Name == backStage)
                 {
                     if (t.SellIn < 11)
                     {
@@ -76,7 +78,7 @@ public class GildedRose
         {
             if (t.Name != "Aged Brie")
             {
-                if (t.Name != "Backstage passes to a TAFKAL80ETC concert")
+                if (notBackStage)
                 {
                     if (t.Quality > 0)
                     {
