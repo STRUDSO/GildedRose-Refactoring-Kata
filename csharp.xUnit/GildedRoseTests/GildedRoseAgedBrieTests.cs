@@ -30,7 +30,7 @@ public class GildedRoseAgedBrieTests
         var quality = 0;
         var item = Any.AgedBrie(quality);
 
-        new GildedRose([item]).UpdateQuality();
+        GildedRose.HandleAgedBrie(item);
 
         Assert.Equal(quality + 2, item.Quality);
     }
