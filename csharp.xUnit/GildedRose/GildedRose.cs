@@ -39,11 +39,11 @@ public class GildedRose
             return;
         }
 
-        Func<bool> isBackStage = HasName("Backstage passes to a TAFKAL80ETC concert", t);
-        Func<bool> isAgedBrie = HasName("Aged Brie", t);
+        bool isBackStage = IsNamed(t, "Backstage passes to a TAFKAL80ETC concert");
+        bool isAgedBrie = IsNamed(t, "Aged Brie");
 
 
-        var isRegularItem = !(isAgedBrie() || isBackStage());
+        var isRegularItem = !(isAgedBrie || isBackStage);
 
         if (isRegularItem)
         {
@@ -58,7 +58,7 @@ public class GildedRose
             {
                 t.Quality += 1;
 
-                if (isBackStage())
+                if (isBackStage)
                 {
                     if (t.SellIn < 11)
                     {
@@ -83,14 +83,14 @@ public class GildedRose
 
         if (t.SellIn < 0)
         {
-            if (isAgedBrie())
+            if (isAgedBrie)
             {
                 if (t.Quality < 50)
                 {
                     t.Quality += 1;
                 }
             }
-            else if (isBackStage())
+            else if (isBackStage)
             {
                 t.Quality = 0;
             }
@@ -104,7 +104,10 @@ public class GildedRose
         }
     }
 
-    private static Func<bool> HasName(string name, Item item) => () => item.Name == name;
+    private static bool IsNamed(Item item, string name)
+    {
+        return item.Name == name;
+    }
 
     private static ProcessingResult HandleSulfuras(Item t)
     {
