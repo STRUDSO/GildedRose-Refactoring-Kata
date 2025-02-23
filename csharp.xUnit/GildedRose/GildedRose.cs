@@ -118,6 +118,7 @@ public class GildedRose
 
     public static ProcessingResult HandleNormalItem(Item t)
     {
+        t.Quality -= 1;
         t.SellIn -= 1;
         return ProcessingResult.Handled;
     }
