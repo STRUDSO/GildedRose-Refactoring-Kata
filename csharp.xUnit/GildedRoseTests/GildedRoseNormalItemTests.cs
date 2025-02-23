@@ -3,7 +3,7 @@ using Xunit;
 
 namespace GildedRoseTests;
 
-public class GildedRoseNormalItemTests_NormalItem_
+public abstract class GildedRoseNormalItemTests_NormalItem_Base
 {
     [Fact]
     public void SpecialItem_ShouldReplyNo()
@@ -14,13 +14,14 @@ public class GildedRoseNormalItemTests_NormalItem_
         Assert.Equal(ProcessingResult.Handled, GildedRose.HandleNormalItem(Any.NormalItem()));
     }
 
+    protected abstract Item CreateItem(int sellIn = 0, int quality = 0);
 
     [Fact]
     public void DayPassed_ShouldDecreaseSellIn()
     {
         // Given
         var sellIn = 0;
-        var item = Any.NormalItem(sellIn:sellIn);
+        var item = CreateItem(sellIn);
 
         // When
         GildedRose.HandleNormalItem(item);
@@ -35,7 +36,7 @@ public class GildedRoseNormalItemTests_NormalItem_
         // Given
         var sellIn = 1;
         var quality = 10;
-        var item = Any.NormalItem(sellIn:sellIn, quality:quality);
+        var item = CreateItem(sellIn:sellIn, quality:quality);
 
         // When
         GildedRose.HandleNormalItem(item);
@@ -48,7 +49,7 @@ public class GildedRoseNormalItemTests_NormalItem_
     public void DayPassed_QualityNotBelowZero()
     {
         // Given
-        var item = Any.NormalItem();
+        var item = CreateItem();
 
         // When
         GildedRose.HandleNormalItem(item);
@@ -61,10 +62,19 @@ public class GildedRoseNormalItemTests_NormalItem_
     public void SellInPassed_QualityTwiceAsFast()
     {
         var quality = 10;
-        var item = Any.NormalItem(quality: quality);
+        var item = CreateItem(quality: quality);
 
         GildedRose.HandleNormalItem(item);
 
         Assert.Equal(quality - 2, item.Quality);
+    }
+}
+
+public class GildedRoseNormalItemTests_NormalItem_ : GildedRoseNormalItemTests_NormalItem_Base
+{
+    protected override Item CreateItem(int sellIn = 0, int quality = 0)
+    {
+        var item = Any.NormalItem(sellIn:sellIn, quality:quality);
+        return item;
     }
 }
