@@ -62,7 +62,7 @@ public class GildedRose
     {
         return Process(item,
             () => !SpecialTreatment.Contains(item.Name),
-            QualityDecay(1));
+            QualityDecay(-1));
     }
 
     static Action<Item> QualityDecay(int qualityDelta)
@@ -71,8 +71,8 @@ public class GildedRose
         {
             item.Quality = item.SellIn switch
             {
-                < 0 => item.Quality - qualityDelta * 2,
-                _ => item.Quality - qualityDelta
+                < 0 => item.Quality + qualityDelta * 2,
+                _ => item.Quality + qualityDelta
             };
         };
     }
