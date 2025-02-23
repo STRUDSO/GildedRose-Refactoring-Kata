@@ -27,4 +27,10 @@ public class GildedRoseTest
         // Then
         Assert.Equal(sellIn - 1, item.SellIn);
     }
+
+    [Fact]
+    public void QualityShouldNotGoBelow0()
+    {
+        Assert.Equal(0, item.Quality);
+    }
 }
