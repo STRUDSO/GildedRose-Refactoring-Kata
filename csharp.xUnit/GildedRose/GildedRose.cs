@@ -39,7 +39,11 @@ public class GildedRose
     private static void ProcessItem(Item t)
     {
         List<Func<Item, ProcessingResult>> strategies = [HandleSulfuras, HandleAgedBrie, HandleBackStage, HandleNormalItem];
-        _ = strategies.Any(strategy => strategy(t) == ProcessingResult.Handled);
+        var handled = strategies.Any(strategy => strategy(t) == ProcessingResult.Handled);
+        if (!handled)
+        {
+            throw new ApplicationException($"Cannot process {t}");
+        }
     }
 
     public static ProcessingResult HandleSulfuras(Item t)
@@ -56,12 +60,19 @@ public class GildedRose
             return ProcessingResult.No;
         }
 
-        return Process(item, item1 => item1.Quality = item1.SellIn switch
+        return Process(item, NormalQuality);
+
+        static void NormalQuality(Item item)
         {
-            < 0 => item1.Quality - 2,
-            _ => item1.Quality - 1
-        });
+            item.Quality = item.SellIn switch
+            {
+                < 0 => item.Quality - 2,
+                _ => item.Quality - 1
+            };
+        }
+
     }
+
 
     private static void SellIn(Item item)
     {
