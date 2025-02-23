@@ -38,24 +38,34 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        List<Func<Item, ProcessingResult>> strategies = [
-            HandleSulfuras,
-            HandleAgedBrie,
-            HandleBackStage,
-            HandleNormalItem,
-            HandleConjuredItem
-        ];
-        if (strategies.All(strategy => strategy(t) != ProcessingResult.Handled))
+        var next = () => Next(t);
+        HandleSulfuras(t, next);
+
+        static void Next(Item t)
         {
-            throw new ApplicationException($"Cannot process {t}");
+            List<Func<Item, ProcessingResult>> strategies =
+            [
+                HandleAgedBrie,
+                HandleBackStage,
+                HandleNormalItem,
+                HandleConjuredItem
+            ];
+            if (strategies.All(strategy => strategy(t) != ProcessingResult.Handled))
+            {
+                throw new ApplicationException($"Cannot process {t}");
+            }
         }
     }
 
-    public static ProcessingResult HandleSulfuras(Item t)
+    public static void HandleSulfuras(Item t, Action next)
     {
-        return t.Name == Sulfuras ?
-            // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
-            ProcessingResult.Handled : ProcessingResult.No;
+        // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
+        if (t.Name == Sulfuras)
+        {
+            return;
+        }
+
+        next();
     }
 
     public static ProcessingResult HandleNormalItem(Item item)
