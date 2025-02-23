@@ -36,14 +36,17 @@ public class GildedRose
         Func<bool> isSulfuras = hasName("Sulfuras, Hand of Ragnaros");
         Func<bool> isAgedBrie = hasName("Aged Brie");
 
+        if (isSulfuras())
+        {
+            // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
+            return;
+        }
+
         if (!isAgedBrie() && !isBackStage())
         {
             if (t.Quality > 0)
             {
-                if (!isSulfuras())
-                {
-                    t.Quality -= 1;
-                }
+                t.Quality -= 1;
             }
         }
         else
@@ -73,10 +76,7 @@ public class GildedRose
             }
         }
 
-        if (!isSulfuras())
-        {
-            t.SellIn -= 1;
-        }
+        t.SellIn -= 1;
 
         if (t.SellIn < 0)
         {
@@ -86,10 +86,7 @@ public class GildedRose
                 {
                     if (t.Quality > 0)
                     {
-                        if (!isSulfuras())
-                        {
-                            t.Quality -= 1;
-                        }
+                        t.Quality -= 1;
                     }
                 }
                 else
