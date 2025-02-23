@@ -22,7 +22,7 @@ public class GildedRose
 
             //Assertions
             Debug.Assert(0 <= t.Quality, "The Quality of an item is never negative");
-            if (qualityBefore <= 50) //Just for clarification, an item can never have its Quality increase above 50, however "Sulfuras" is a legendary item and as such its Quality is 80 and it never alters.
+            if (qualityBefore <= 50) // Just for clarification, an item can never have its Quality increase above 50, however "Sulfuras" is a legendary item and as such its Quality is 80, and it never alters.
             {
                 Debug.Assert(t.Quality <= 50, "The Quality of an item is never more than 50", t.ToString());
             }
@@ -31,16 +31,18 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        bool IsName(Item item1, string s) => item1.Name == s;
+        Func<bool> HasName(string name) => () => t.Name == name;
+        Func<bool> isSulfuras = HasName("Sulfuras, Hand of Ragnaros");
 
-        if (IsName(t, "Sulfuras, Hand of Ragnaros"))
+        if (isSulfuras())
         {
             // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
             return;
         }
 
-        Func<bool> isBackStage = () => IsName(t, "Backstage passes to a TAFKAL80ETC concert");
-        Func<bool> isAgedBrie = () => IsName(t, "Aged Brie");
+        Func<bool> isBackStage = HasName("Backstage passes to a TAFKAL80ETC concert");
+        Func<bool> isAgedBrie = HasName("Aged Brie");
+
 
         if (!isAgedBrie() && !isBackStage())
         {
@@ -78,6 +80,7 @@ public class GildedRose
 
         t.SellIn -= 1;
 
+        // Stuff that ages
         if (t.SellIn < 0)
         {
             if (!isAgedBrie())
