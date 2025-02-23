@@ -80,16 +80,9 @@ public class GildedRose
 
     public static ProcessingResult HandleAgedBrie(Item item)
     {
-        return Process(item, () => item.Name == AgedBrie, HandleBrieQuality);
-
-        static void HandleBrieQuality(Item item)
-        {
-            item.Quality = item.SellIn switch
-            {
-                < 0 => item.Quality + 2,
-                _ => item.Quality + 1
-            };
-        }
+        return Process(item,
+            () => item.Name == AgedBrie,
+            QualityDecay(1));
     }
 
     public static ProcessingResult HandleBackStage(Item item)
