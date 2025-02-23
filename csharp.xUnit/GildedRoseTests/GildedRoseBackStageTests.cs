@@ -71,4 +71,15 @@ public class GildedRoseBackStageTests {
         Assert.Equal(0, item.Quality);
     }
 
+    [Fact]
+    public void BackstagePass_Quality50_ShouldNotIncrease()
+    {
+        var quality = 50;
+        var item = Any.BackStagePass(sellIn:1, quality:quality);
+
+        new GildedRose([item]).UpdateQuality();
+
+        Assert.Equal(50, item.Quality);
+    }
+
 }
