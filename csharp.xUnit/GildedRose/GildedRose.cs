@@ -31,9 +31,10 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        Func<bool> isBackStage = () =>  t.Name == "Backstage passes to a TAFKAL80ETC concert";
-        Func<bool> isSulfuras = () => t.Name == "Sulfuras, Hand of Ragnaros";
-        Func<bool> isAgedBrie = () => t.Name == "Aged Brie";
+        Func<string, Func<bool>> hasName = name => () => t.Name == name;
+        Func<bool> isBackStage = hasName("Backstage passes to a TAFKAL80ETC concert");
+        Func<bool> isSulfuras = hasName("Sulfuras, Hand of Ragnaros");
+        Func<bool> isAgedBrie = hasName("Aged Brie");
 
         if (!isAgedBrie() && !isBackStage())
         {
