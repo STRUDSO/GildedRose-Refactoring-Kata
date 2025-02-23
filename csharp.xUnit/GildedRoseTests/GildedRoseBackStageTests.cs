@@ -9,6 +9,10 @@ public class GildedRoseBackStageTests {
     public void BackstageHandles()
     {
         Assert.Equal(ProcessingResult.Handled, GildedRose.HandleBackStage(Any.BackStagePass()));
+
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleBackStage(Any.Sulfuras()));
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleBackStage(Any.AgedBrie()));
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleBackStage(Any.NormalItem()));
     }
 
     [Fact]

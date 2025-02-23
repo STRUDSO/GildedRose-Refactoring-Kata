@@ -141,6 +141,10 @@ public class GildedRose
 
     public static ProcessingResult HandleBackStage(Item backStagePass)
     {
+        if (backStagePass.Name != Backstage)
+        {
+            return ProcessingResult.No;
+        }
         return ProcessingResult.Handled;
     }
 }
