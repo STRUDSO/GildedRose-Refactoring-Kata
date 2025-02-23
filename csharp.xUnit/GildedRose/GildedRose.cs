@@ -149,6 +149,11 @@ public class GildedRose
         backStagePass.SellIn -= 1;
         backStagePass.Quality += 1;
 
+        if (backStagePass.SellIn < 10)
+        {
+            backStagePass.Quality += 1;
+        }
+
         return ProcessingResult.Handled;
     }
 }
