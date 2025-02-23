@@ -66,7 +66,7 @@ public class GildedRoseTest
     }
 
     [Fact]
-    public void Sulfuras()
+    public void Sulfuras__NeverDecreasesInSellInOrQuality()
     {
         var item = Any.Sulfuras();
         var itemQuality = item.Quality;
@@ -77,4 +77,6 @@ public class GildedRoseTest
         Assert.Equal(itemQuality, item.Quality);
         Assert.Equal(itemSellIn, item.SellIn);
     }
+
+
 }
