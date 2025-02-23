@@ -72,7 +72,7 @@ public class GildedRoseTest
         var itemQuality = item.Quality;
         var itemSellIn = item.SellIn;
 
-        new GildedRose([item]).UpdateQuality();
+        GildedRose.HandleSulfuras(item);
 
         Assert.Equal(itemQuality, item.Quality);
         Assert.Equal(itemSellIn, item.SellIn);

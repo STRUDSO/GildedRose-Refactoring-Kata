@@ -109,7 +109,7 @@ public class GildedRose
         return item.Name == name;
     }
 
-    private static ProcessingResult HandleSulfuras(Item t)
+    public static ProcessingResult HandleSulfuras(Item t)
     {
         return t.Name == "Sulfuras, Hand of Ragnaros" ?
             // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
