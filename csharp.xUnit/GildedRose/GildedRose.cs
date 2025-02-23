@@ -32,20 +32,20 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        Func<bool> HasName(string name, Item item) => () => item.Name == name;
-        Func<bool> isSulfuras = HasName("Sulfuras, Hand of Ragnaros", t);
-
-        if (isSulfuras())
+        List<Func<Item, ProcessingResult>> strategies = [HandleSulfuras];
+        foreach (var strategy in strategies)
         {
-            // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
-            return;
+            if (strategy(t) == ProcessingResult.Handled)
+                return;
         }
 
         Func<bool> isBackStage = HasName("Backstage passes to a TAFKAL80ETC concert", t);
         Func<bool> isAgedBrie = HasName("Aged Brie", t);
 
 
-        if (!(isAgedBrie() || isBackStage()))
+        var isRegularItem = !(isAgedBrie() || isBackStage());
+
+        if (isRegularItem)
         {
             if (0 < t.Quality)
             {
@@ -83,21 +83,18 @@ public class GildedRose
 
         if (t.SellIn < 0)
         {
-            var agedBrie = isAgedBrie();
-            var backStage = isBackStage();
-
-            if (agedBrie)
+            if (isAgedBrie())
             {
                 if (t.Quality < 50)
                 {
                     t.Quality += 1;
                 }
             }
-            else if (backStage)
+            else if (isBackStage())
             {
                 t.Quality = 0;
             }
-            else
+            else if(isRegularItem)
             {
                 if (0 < t.Quality)
                 {
@@ -105,5 +102,20 @@ public class GildedRose
                 }
             }
         }
+    }
+
+    private static Func<bool> HasName(string name, Item item) => () => item.Name == name;
+
+    private static ProcessingResult HandleSulfuras(Item t)
+    {
+        return t.Name == "Sulfuras, Hand of Ragnaros" ?
+            // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
+            ProcessingResult.Handled : ProcessingResult.No;
+    }
+
+    public enum ProcessingResult
+    {
+        Handled,
+        No
     }
 }
