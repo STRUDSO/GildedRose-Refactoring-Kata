@@ -34,4 +34,15 @@ public class GildedRoseTest
         // Then
         Assert.Equal(0, item.Quality);
     }
+
+    [Fact]
+    public void NormalItem_SellInPassed_QualityTwiceAsFast()
+    {
+        var quality = 10;
+        var item = Any.NormalItem(quality: quality);
+
+        new GildedRose([item]).UpdateQuality();
+
+        Assert.Equal(quality - 2, item.Quality);
+    }
 }
