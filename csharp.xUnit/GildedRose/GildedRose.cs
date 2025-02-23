@@ -94,7 +94,7 @@ public class GildedRose
             } else
             if (backStage)
             {
-                t.Quality -= t.Quality;
+                t.Quality = 0;
             }
             else
             {
