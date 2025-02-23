@@ -31,16 +31,16 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        Func<string, Func<bool>> hasName = name => () => t.Name == name;
-        Func<bool> isBackStage = hasName("Backstage passes to a TAFKAL80ETC concert");
-        Func<bool> isSulfuras = hasName("Sulfuras, Hand of Ragnaros");
-        Func<bool> isAgedBrie = hasName("Aged Brie");
+        Func<bool> HasName(Item item, string name) => () => item.Name == name;
 
-        if (isSulfuras())
+        if (HasName(t, "Sulfuras, Hand of Ragnaros")())
         {
             // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
             return;
         }
+
+        Func<bool> isBackStage = HasName(t, "Backstage passes to a TAFKAL80ETC concert");
+        Func<bool> isAgedBrie = HasName(t, "Aged Brie");
 
         if (!isAgedBrie() && !isBackStage())
         {
