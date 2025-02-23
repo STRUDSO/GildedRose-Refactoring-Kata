@@ -56,28 +56,11 @@ public class GildedRose
             return ProcessingResult.No;
         }
 
-        return Process(item, NormalQuality);
-    }
-
-    private static ProcessingResult Process(Item item, Action<Item> normalQuality)
-    {
-        Apply(item, SellIn, normalQuality, EnsureQualityIsInRange);
-        return ProcessingResult.Handled;
-    }
-
-    private static void Apply(Item item, params Action<Item>[] normalQuality)
-    {
-        foreach (var q in normalQuality)
-            q(item);
-    }
-
-    private static void NormalQuality(Item item)
-    {
-        item.Quality = item.SellIn switch
+        return Process(item, item1 => item1.Quality = item1.SellIn switch
         {
-            < 0 => item.Quality - 2,
-            _ => item.Quality - 1
-        };
+            < 0 => item1.Quality - 2,
+            _ => item1.Quality - 1
+        });
     }
 
     private static void SellIn(Item item)
@@ -128,6 +111,19 @@ public class GildedRose
         var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
         item.Quality = ensureQualityRange;
     }
+
+    private static ProcessingResult Process(Item item, Action<Item> normalQuality)
+    {
+        Apply(item, SellIn, normalQuality, EnsureQualityIsInRange);
+        return ProcessingResult.Handled;
+    }
+
+    private static void Apply(Item item, params Action<Item>[] normalQuality)
+    {
+        foreach (var q in normalQuality)
+            q(item);
+    }
+
 }
 
 public enum ProcessingResult
