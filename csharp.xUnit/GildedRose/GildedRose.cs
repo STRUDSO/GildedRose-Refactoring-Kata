@@ -73,27 +73,21 @@ public class GildedRose
 
     }
 
-
-    private static void SellIn(Item item)
-    {
-        item.SellIn -= 1;
-    }
-
     public static ProcessingResult HandleAgedBrie(Item item)
     {
         if (item.Name != AgedBrie)
             return ProcessingResult.No;
 
-        item.SellIn -= 1;
+        return Process(item, HandleBrieQuality);
 
-        item.Quality = item.SellIn switch
+        static void HandleBrieQuality(Item item)
         {
-            < 0 => item.Quality + 2,
-            _ => item.Quality + 1
-        };
-
-        EnsureQualityIsInRange(item);
-        return ProcessingResult.Handled;
+            item.Quality = item.SellIn switch
+            {
+                < 0 => item.Quality + 2,
+                _ => item.Quality + 1
+            };
+        }
     }
 
     public static ProcessingResult HandleBackStage(Item item)
@@ -117,17 +111,24 @@ public class GildedRose
         return ProcessingResult.Handled;
     }
 
-    private static void EnsureQualityIsInRange(Item item)
-    {
-        var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
-        item.Quality = ensureQualityRange;
-    }
 
     private static ProcessingResult Process(Item item, Action<Item> normalQuality)
     {
         Apply(item, SellIn, normalQuality, EnsureQualityIsInRange);
         return ProcessingResult.Handled;
     }
+    private static void SellIn(Item item)
+    {
+        item.SellIn -= 1;
+    }
+
+    private static void EnsureQualityIsInRange(Item item)
+    {
+        var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
+        item.Quality = ensureQualityRange;
+    }
+
+
 
     private static void Apply(Item item, params Action<Item>[] normalQuality)
     {
