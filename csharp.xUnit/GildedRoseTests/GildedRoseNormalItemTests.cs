@@ -11,6 +11,7 @@ public class GildedRoseNormalItemTests
         Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.Sulfuras()));
         Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.BackStagePass()));
         Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.AgedBrie()));
+        Assert.Equal(ProcessingResult.Handled, GildedRose.HandleNormalItem(Any.NormalItem()));
     }
 
 
