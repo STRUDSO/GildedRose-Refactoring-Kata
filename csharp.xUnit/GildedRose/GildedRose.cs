@@ -122,12 +122,6 @@ public class GildedRose
         return ProcessingResult.Handled;
     }
 
-    public enum ProcessingResult
-    {
-        Handled,
-        No
-    }
-
     public static ProcessingResult HandleAgedBrie(Item item)
     {
         if (item.Name != AgedBrie)
@@ -137,4 +131,10 @@ public class GildedRose
 
         return ProcessingResult.Handled;
     }
+}
+
+public enum ProcessingResult
+{
+    Handled,
+    No
 }

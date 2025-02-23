@@ -6,6 +6,13 @@ namespace GildedRoseTests;
 public class GildedRoseAgedBrieTests
 {
     [Fact]
+    public void AgedBrie_WrongName_ShouldSayNo()
+    {
+        var handleAgedBrie = GildedRose.HandleAgedBrie(Any.NormalItem());
+
+        Assert.Equal(ProcessingResult.No, handleAgedBrie);
+    }
+    [Fact]
     public void AgedBrie_Fresh_ShouldIncreaseInQuality()
     {
         var quality = 0;
