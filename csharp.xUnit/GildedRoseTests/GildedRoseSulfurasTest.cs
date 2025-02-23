@@ -13,7 +13,7 @@ public class GildedRoseSulfurasTest
         var itemQuality = item.Quality;
         var itemSellIn = item.SellIn;
 
-        GildedRose.HandleSulfuras(item, () => {} );
+        GildedRose.HandleSulfuras(item, _ => {} );
 
         Assert.Equal(itemQuality, item.Quality);
         Assert.Equal(itemSellIn, item.SellIn);

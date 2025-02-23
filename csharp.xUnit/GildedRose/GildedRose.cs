@@ -7,22 +7,35 @@ namespace GildedRoseKata;
 
 public class GildedRose
 {
-    private static readonly IEnumerable<Action<Item, Action>> PipeLine = [
-        HandleSulfuras,
+    private static readonly Action<Item> PipeLine =
+        ToPipeline([
+            HandleSulfuras,
 
-        Do(item => item.SellIn -= 1),
+            Do(item => item.SellIn -= 1),
 
-        Do(HandleAgedBrie),
-        Do(HandleBackStage),
-        Do(HandleNormalItem),
-        Do(HandleConjuredItem),
+            Do(HandleAgedBrie),
+            Do(HandleBackStage),
+            Do(HandleNormalItem),
+            Do(HandleConjuredItem),
 
-        Do(item =>
-        {
-            var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
-            item.Quality = ensureQualityRange;
-        })
-    ];
+            Do(item =>
+            {
+                var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
+                item.Quality = ensureQualityRange;
+            })
+        ]);
+
+    private static Action<Item> ToPipeline(IEnumerable<Action<Item, Action<Item>>> actions)
+    {
+        // we need to start from the other end and build backwards...
+        var reversed = actions.Reverse();
+
+        // we create a chain where we end out doing a noop in the end
+        var noop = (Item _) => { };
+
+        // so ..._last(third_last(second_last(noop())))
+        return reversed.Aggregate(noop, (next, rhs) => item => rhs(item, next));
+    }
 
     private const string Sulfuras = "Sulfuras, Hand of Ragnaros";
     private const string Backstage = "Backstage passes to a TAFKAL80ETC concert";
@@ -42,7 +55,7 @@ public class GildedRose
         {
             var qualityBefore = t.Quality;
 
-            ProcessPipeline(PipeLine, t);
+            PipeLine(t);
 
             //Assertions
             Debug.Assert(0 <= t.Quality, "The Quality of an item is never negative");
@@ -54,31 +67,17 @@ public class GildedRose
         }
     }
 
-    static void ProcessPipeline(IEnumerable<Action<Item, Action>> actions, Item t)
-    {
-        var list = actions.ToList();
 
-        void Next(int index)
-        {
-            if (index < list.Count)
-            {
-                list[index](t, () => Next(index + 1));
-            }
-        }
-
-        Next(0);
-    }
-
-    private static Action<Item, Action> Do(Action<Item> act)
+    private static Action<Item, Action<Item>> Do(Action<Item> act)
     {
         return (it, next) =>
         {
             act(it);
-            next();
+            next(it);
         };
     }
 
-    public static void HandleSulfuras(Item t, Action next)
+    public static void HandleSulfuras(Item t, Action<Item> next)
     {
         // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
         if (t.Name == Sulfuras)
@@ -86,7 +85,7 @@ public class GildedRose
             return;
         }
 
-        next();
+        next(t);
     }
 
     private static void HandleNormalItem(Item item)
