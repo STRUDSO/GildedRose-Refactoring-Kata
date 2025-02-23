@@ -30,13 +30,15 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        const string backStage = "Backstage passes to a TAFKAL80ETC concert";
-        var notBackStage = t.Name != backStage;
+        var isBackStage = t.Name == "Backstage passes to a TAFKAL80ETC concert";
+        var notBackStage = !isBackStage;
+        var notSulfuras = t.Name != "Sulfuras, Hand of Ragnaros";
+
         if (t.Name != "Aged Brie" && notBackStage)
         {
             if (t.Quality > 0)
             {
-                if (t.Name != "Sulfuras, Hand of Ragnaros")
+                if (notSulfuras)
                 {
                     t.Quality -= 1;
                 }
@@ -48,7 +50,7 @@ public class GildedRose
             {
                 t.Quality += 1;
 
-                if (t.Name == backStage)
+                if (isBackStage)
                 {
                     if (t.SellIn < 11)
                     {
@@ -69,7 +71,7 @@ public class GildedRose
             }
         }
 
-        if (t.Name != "Sulfuras, Hand of Ragnaros")
+        if (notSulfuras)
         {
             t.SellIn -= 1;
         }
@@ -82,7 +84,7 @@ public class GildedRose
                 {
                     if (t.Quality > 0)
                     {
-                        if (t.Name != "Sulfuras, Hand of Ragnaros")
+                        if (notSulfuras)
                         {
                             t.Quality -= 1;
                         }
