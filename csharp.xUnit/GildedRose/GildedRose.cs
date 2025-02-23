@@ -22,7 +22,8 @@ public class GildedRose
 
             //Assertions
             Debug.Assert(0 <= t.Quality, "The Quality of an item is never negative");
-            if (qualityBefore <= 50) // Just for clarification, an item can never have its Quality increase above 50, however "Sulfuras" is a legendary item and as such its Quality is 80, and it never alters.
+            if (qualityBefore <=
+                50) // Just for clarification, an item can never have its Quality increase above 50, however "Sulfuras" is a legendary item and as such its Quality is 80, and it never alters.
             {
                 Debug.Assert(t.Quality <= 50, "The Quality of an item is never more than 50", t.ToString());
             }
@@ -91,8 +92,8 @@ public class GildedRose
                 {
                     t.Quality += 1;
                 }
-            } else
-            if (backStage)
+            }
+            else if (backStage)
             {
                 t.Quality = 0;
             }
