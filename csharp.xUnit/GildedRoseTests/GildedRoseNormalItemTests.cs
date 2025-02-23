@@ -3,10 +3,10 @@ using Xunit;
 
 namespace GildedRoseTests;
 
-public class GildedRoseNormalItemTests
+public class GildedRoseNormalItemTests_NormalItem_
 {
     [Fact]
-    public void NormalItem_SpecialItem_ShouldReplyNo()
+    public void SpecialItem_ShouldReplyNo()
     {
         Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.Sulfuras()));
         Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.BackStagePass()));
@@ -16,7 +16,7 @@ public class GildedRoseNormalItemTests
 
 
     [Fact]
-    public void NormalItem_DayPassed_ShouldDecreaseSellIn()
+    public void DayPassed_ShouldDecreaseSellIn()
     {
         // Given
         var sellIn = 0;
@@ -30,7 +30,7 @@ public class GildedRoseNormalItemTests
     }
 
     [Fact]
-    public void NormalItem_DayPassed_QualityDecreased()
+    public void DayPassed_QualityDecreased()
     {
         // Given
         var sellIn = 1;
@@ -45,7 +45,7 @@ public class GildedRoseNormalItemTests
     }
 
     [Fact]
-    public void NormalItem_DayPassed_QualityNotBelowZero()
+    public void DayPassed_QualityNotBelowZero()
     {
         // Given
         var item = Any.NormalItem();
@@ -58,7 +58,7 @@ public class GildedRoseNormalItemTests
     }
 
     [Fact]
-    public void NormalItem_SellInPassed_QualityTwiceAsFast()
+    public void SellInPassed_QualityTwiceAsFast()
     {
         var quality = 10;
         var item = Any.NormalItem(quality: quality);

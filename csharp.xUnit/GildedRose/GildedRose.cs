@@ -10,6 +10,7 @@ public class GildedRose
     private const string Sulfuras = "Sulfuras, Hand of Ragnaros";
     private const string Backstage = "Backstage passes to a TAFKAL80ETC concert";
     private const string AgedBrie = "Aged Brie";
+    private const string Conjured = "Conjured Mana Cake";
     private static readonly HashSet<string> SpecialTreatment = [AgedBrie, Sulfuras, Backstage];
 
     private readonly IList<Item> _items;
@@ -65,19 +66,6 @@ public class GildedRose
             QualityDecay(-1));
     }
 
-    static Action<Item> QualityDecay(int qualityDelta)
-    {
-        return item =>
-        {
-            item.Quality = item.SellIn switch
-            {
-                < 0 => item.Quality + qualityDelta * 2,
-                _ => item.Quality + qualityDelta
-            };
-        };
-    }
-
-
     public static ProcessingResult HandleAgedBrie(Item item)
     {
         return Process(item,
@@ -101,15 +89,29 @@ public class GildedRose
         }
     }
 
+    static Action<Item> QualityDecay(int qualityDelta)
+    {
+        return item =>
+        {
+            item.Quality = item.SellIn switch
+            {
+                < 0 => item.Quality + qualityDelta * 2,
+                _ => item.Quality + qualityDelta
+            };
+        };
+    }
 
-    private static ProcessingResult Process(Item item, Func<bool> handles, Action<Item> normalQuality)
+
+    private static ProcessingResult Process(Item item, Func<bool> handles, Action<Item> qualityDecay)
     {
         if (!handles())
         {
             return ProcessingResult.No;
         }
 
-        Apply(item, SellIn, normalQuality, EnsureQualityIsInRange);
+        Action<Item>[] pipeline = [SellIn, qualityDecay, EnsureQualityIsInRange];
+        foreach (var q in pipeline)
+            q(item);
         return ProcessingResult.Handled;
     }
     private static void SellIn(Item item)
@@ -122,15 +124,6 @@ public class GildedRose
         var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
         item.Quality = ensureQualityRange;
     }
-
-
-
-    private static void Apply(Item item, params Action<Item>[] normalQuality)
-    {
-        foreach (var q in normalQuality)
-            q(item);
-    }
-
 }
 
 public enum ProcessingResult
