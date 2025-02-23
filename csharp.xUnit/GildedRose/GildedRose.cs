@@ -38,7 +38,7 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        List<Func<Item, ProcessingResult>> strategies = [HandleSulfuras, HandleNormalItem];
+        List<Func<Item, ProcessingResult>> strategies = [HandleSulfuras, HandleAgedBrie, HandleNormalItem];
         if (strategies.Any(strategy => strategy(t) == ProcessingResult.Handled))
         {
             return;

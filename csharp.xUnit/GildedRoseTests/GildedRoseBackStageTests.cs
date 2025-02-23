@@ -3,20 +3,7 @@ using Xunit;
 
 namespace GildedRoseTests;
 
-public class GildedRoseTests {
-
-    [Fact]
-    public void Sulfuras__NeverDecreasesInSellInOrQuality()
-    {
-        var item = Any.Sulfuras();
-        var itemQuality = item.Quality;
-        var itemSellIn = item.SellIn;
-
-        GildedRose.HandleSulfuras(item);
-
-        Assert.Equal(itemQuality, item.Quality);
-        Assert.Equal(itemSellIn, item.SellIn);
-    }
+public class GildedRoseBackStageTests {
 
     [Fact]
     public void BackStagePasses_10DaysOrLess_QualityBy2()
