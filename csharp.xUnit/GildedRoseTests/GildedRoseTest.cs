@@ -45,4 +45,15 @@ public class GildedRoseTest
 
         Assert.Equal(quality - 2, item.Quality);
     }
+
+    [Fact]
+    public void AgedBrie_DaysPassed_ShouldIncreaseInQualityTwice()
+    {
+        var quality = 0;
+        var item = Any.AgedBrie(quality);
+
+        new GildedRose([item]).UpdateQuality();
+
+        Assert.Equal(quality + 2, item.Quality);
+    }
 }

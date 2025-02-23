@@ -8,4 +8,9 @@ public class Any
     {
         return new Item { Name = name, SellIn = sellIn, Quality = quality };
     }
+
+    public static Item AgedBrie(int quality = 0)
+    {
+        return NormalItem("Aged Brie", quality:quality);
+    }
 }
