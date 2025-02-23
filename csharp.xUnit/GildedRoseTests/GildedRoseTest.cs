@@ -11,12 +11,15 @@ public class GildedRoseTest
     [Fact]
     public void SellInShouldDecrease()
     {
+        // Given
         var sellIn = 0;
         var item = new Item { Name = "foo", SellIn = sellIn, Quality = 0 };
-        IList<Item> items = [item];
-        GildedRose app = new GildedRose(items);
+        GildedRose app = new GildedRose([item]);
+
+        // When
         app.UpdateQuality();
 
+        // Then
         Assert.Equal(sellIn - 1, item.SellIn);
     }
 }
