@@ -70,6 +70,16 @@ public class GildedRoseSimpleItemTests_ConjuredItems() : GildedRoseSimpleItemTes
         return Any.ConjuredItem(sellIn, quality);
     }
 
+    [Fact]
+    public void SellInQualityCloseToZero()
+    {
+        var conjuredItem = Any.ConjuredItem(1,4);
+
+        Handle(conjuredItem);
+
+        Assert.Equal(2, conjuredItem.Quality);
+    }
+
     protected override void Handle(Item item)
     {
         GildedRose.HandleConjuredItem(item);

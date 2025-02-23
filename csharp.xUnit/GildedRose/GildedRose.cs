@@ -43,6 +43,7 @@ public class GildedRose
             HandleAgedBrie,
             HandleBackStage,
             HandleNormalItem,
+            HandleConjuredItem
         ];
         var handled = strategies.Any(strategy => strategy(t) == ProcessingResult.Handled);
         if (!handled)
@@ -60,7 +61,7 @@ public class GildedRose
 
     public static ProcessingResult HandleNormalItem(Item item)
     {
-        HashSet<string> specialTreatment = [AgedBrie, Sulfuras, Backstage];
+        HashSet<string> specialTreatment = [AgedBrie, Sulfuras, Backstage, Conjured];
         return Process(item,
             () => !specialTreatment.Contains(item.Name),
             QualityDecay(-1));
