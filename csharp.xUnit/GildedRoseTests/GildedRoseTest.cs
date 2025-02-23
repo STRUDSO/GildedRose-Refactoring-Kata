@@ -13,7 +13,7 @@ public class GildedRoseTest
     {
         // Given
         var sellIn = 0;
-        var item = new Item { Name = "foo", SellIn = sellIn, Quality = 0 };
+        var item = Any.NormalItem(sellIn:sellIn);
 
         // When
         new GildedRose([item]).UpdateQuality();
