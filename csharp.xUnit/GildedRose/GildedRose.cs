@@ -1,11 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace GildedRoseKata;
 
 public class GildedRose
 {
+    private static readonly IEnumerable<Action<Item, Action>> PipeLine = [
+        HandleSulfuras,
+
+        Do(item => item.SellIn -= 1),
+
+        Do(HandleAgedBrie),
+        Do(HandleBackStage),
+        Do(HandleNormalItem),
+        Do(HandleConjuredItem),
+
+        Do(item =>
+        {
+            var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
+            item.Quality = ensureQualityRange;
+        })
+    ];
+
     private const string Sulfuras = "Sulfuras, Hand of Ragnaros";
     private const string Backstage = "Backstage passes to a TAFKAL80ETC concert";
     private const string AgedBrie = "Aged Brie";
@@ -23,7 +41,8 @@ public class GildedRose
         foreach (var t in _items)
         {
             var qualityBefore = t.Quality;
-            ProcessItem(t);
+
+            ProcessPipeline(PipeLine, t);
 
             //Assertions
             Debug.Assert(0 <= t.Quality, "The Quality of an item is never negative");
@@ -35,36 +54,19 @@ public class GildedRose
         }
     }
 
-    private static void ProcessItem(Item t)
+    static void ProcessPipeline(IEnumerable<Action<Item, Action>> actions, Item t)
     {
-        IEnumerable<Action<Item, Action>> actions =
-        [
-            HandleSulfuras,
+        var list = actions.ToList();
 
-            Do(item => item.SellIn -= 1),
-
-            Do(HandleAgedBrie),
-            Do(HandleBackStage),
-            Do(HandleNormalItem),
-            Do(HandleConjuredItem),
-
-            Do(item =>
-            {
-                var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
-                item.Quality = ensureQualityRange;
-            })
-        ];
-
-        Action next = null;
-        using var enumerator = actions.GetEnumerator();
-        next = () =>
+        void Next(int index)
         {
-            if (enumerator.MoveNext())
+            if (index < list.Count)
             {
-                enumerator.Current(t, next);
+                list[index](t, () => Next(index + 1));
             }
-        };
-        next();
+        }
+
+        Next(0);
     }
 
     private static Action<Item, Action> Do(Action<Item> act)
