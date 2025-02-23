@@ -146,6 +146,7 @@ public class GildedRose
             return ProcessingResult.No;
         }
 
+        backStagePass.SellIn -= 1;
         backStagePass.Quality += 1;
 
         return ProcessingResult.Handled;

@@ -16,6 +16,18 @@ public class GildedRoseBackStageTests {
     }
 
     [Fact]
+    public void Backstage_SellIn_ShouldDecrease()
+    {
+        var item = Any.BackStagePass();
+        var sellIn = item.SellIn;
+
+        GildedRose.HandleBackStage(item);
+
+
+        Assert.Equal(sellIn - 1, item.SellIn);
+    }
+
+    [Fact]
     public void BackStagePasses_MoreThan10Days_QualityBy1()
     {
         var quality = 10;
