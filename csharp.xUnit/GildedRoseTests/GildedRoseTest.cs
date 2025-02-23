@@ -26,7 +26,7 @@ public class GildedRoseTest
     public void QualityShouldNotGoBelow0()
     {
         // Given
-        var item = new Item { Name = "foo", SellIn = 0, Quality = 0 };
+        var item = Any.NormalItem();
 
         // When
         new GildedRose([item]).UpdateQuality();
