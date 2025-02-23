@@ -80,30 +80,33 @@ public class GildedRose
 
         t.SellIn -= 1;
 
-        // Stuff that ages
         if (t.SellIn < 0)
         {
-            if (!isAgedBrie())
+            PastSellDate(t, isAgedBrie, isBackStage);
+        }
+    }
+
+    private static void PastSellDate(Item t, Func<bool> isAgedBrie, Func<bool> isBackStage)
+    {
+        if (isAgedBrie())
+        {
+            if (t.Quality < 50)
             {
-                if (!isBackStage())
-                {
-                    if (t.Quality > 0)
-                    {
-                        t.Quality -= 1;
-                    }
-                }
-                else
-                {
-                    t.Quality -= t.Quality;
-                }
+                t.Quality += 1;
             }
-            else
-            {
-                if (t.Quality < 50)
-                {
-                    t.Quality += 1;
-                }
-            }
+
+            return;
+        }
+
+        if (isBackStage())
+        {
+            t.Quality -= t.Quality;
+            return;
+        }
+
+        if (t.Quality > 0)
+        {
+            t.Quality -= 1;
         }
     }
 }
