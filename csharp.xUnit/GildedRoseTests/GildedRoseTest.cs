@@ -21,5 +21,6 @@ public class GildedRoseTest
 
         // Then
         Assert.Equal(sellIn - 1, item.SellIn);
+        Assert.Equal(sellIn - 1, item.SellIn);
     }
 }
