@@ -96,19 +96,18 @@ public class GildedRose
         {
             return ProcessingResult.No;
         }
+        return Process(item, HandleBackStageQuality);
 
-        item.SellIn -= 1;
-
-        item.Quality = item.SellIn switch
+        static void HandleBackStageQuality(Item item1)
         {
-            < 0 => 0,
-            < 5 => item.Quality + 3,
-            < 10 => item.Quality + 2,
-            _ => item.Quality + 1
-        };
-
-        EnsureQualityIsInRange(item);
-        return ProcessingResult.Handled;
+            item1.Quality = item1.SellIn switch
+            {
+                < 0 => 0,
+                < 5 => item1.Quality + 3,
+                < 10 => item1.Quality + 2,
+                _ => item1.Quality + 1
+            };
+        }
     }
 
 
