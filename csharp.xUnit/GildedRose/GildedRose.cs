@@ -127,4 +127,14 @@ public class GildedRose
         Handled,
         No
     }
+
+    public static ProcessingResult HandleAgedBrie(Item item)
+    {
+        if (item.Name != AgedBrie)
+            return ProcessingResult.No;
+
+        item.Quality = Math.Min(50, item.Quality + 1);
+
+        return ProcessingResult.Handled;
+    }
 }

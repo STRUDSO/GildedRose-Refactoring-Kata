@@ -11,7 +11,7 @@ public class GildedRoseAgedBrieTests
         var quality = 0;
         var item = Any.AgedBrie(quality, sellIn: 1);
 
-        new GildedRose([item]).UpdateQuality();
+        GildedRose.HandleAgedBrie(item);
 
         Assert.Equal(quality + 1, item.Quality);
     }
