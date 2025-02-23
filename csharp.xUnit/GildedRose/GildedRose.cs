@@ -103,22 +103,22 @@ public class GildedRose
             ProcessingResult.Handled : ProcessingResult.No;
     }
 
-    public static ProcessingResult HandleNormalItem(Item t)
+    public static ProcessingResult HandleNormalItem(Item item)
     {
-        if (SpecialTreatment.Contains(t.Name))
+        if (SpecialTreatment.Contains(item.Name))
         {
             return ProcessingResult.No;
         }
 
-        t.Quality -= 1;
-        t.SellIn -= 1;
+        item.Quality -= 1;
+        item.SellIn -= 1;
 
-        if (t.SellIn < 0)
+        if (item.SellIn < 0)
         {
-            t.Quality -= 1;
+            item.Quality -= 1;
         }
 
-        t.Quality = Math.Max(t.Quality, 0);
+        EnsureQualityRange(item);
         return ProcessingResult.Handled;
     }
 
@@ -165,7 +165,7 @@ public class GildedRose
 
     private static void EnsureQualityRange(Item item)
     {
-        var ensureQualityRange = Math.Min(50, item.Quality);
+        var ensureQualityRange = Math.Max(0, Math.Min(50, item.Quality));
         item.Quality = ensureQualityRange;
     }
 }
