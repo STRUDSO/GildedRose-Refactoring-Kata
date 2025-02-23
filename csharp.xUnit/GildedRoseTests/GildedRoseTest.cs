@@ -20,6 +20,21 @@ public class GildedRoseTest
     }
 
     [Fact]
+    public void NormalItem_DayPassed_QualityDecreased()
+    {
+        // Given
+        var sellIn = 1;
+        var quality = 10;
+        var item = Any.NormalItem(sellIn:sellIn, quality:quality);
+
+        // When
+        new GildedRose([item]).UpdateQuality();
+
+        // Then
+        Assert.Equal(quality - 1, item.Quality);
+    }
+
+    [Fact]
     public void NormalItem_DayPassed_QualityNotBelowZero()
     {
         // Given
