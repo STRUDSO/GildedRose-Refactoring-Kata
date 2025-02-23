@@ -93,7 +93,7 @@ public class GildedRose
         HashSet<string> specialTreatment = [AgedBrie, Sulfuras, Backstage, Conjured];
         if (!specialTreatment.Contains(item.Name))
         {
-            QualityDecay(-1)(item);
+            QualityDecay(-1, item);
         }
     }
 
@@ -101,7 +101,7 @@ public class GildedRose
     {
         if (item.Name == Conjured)
         {
-            QualityDecay(-2)(item);
+            QualityDecay(-2, item);
         }
     }
 
@@ -109,7 +109,7 @@ public class GildedRose
     {
         if (item.Name == AgedBrie)
         {
-            QualityDecay(1)(item);
+            QualityDecay(1, item);
         }
     }
 
@@ -127,15 +127,12 @@ public class GildedRose
         }
     }
 
-    static Action<Item> QualityDecay(int qualityDelta)
+    static void QualityDecay(int qualityDelta, Item item)
     {
-        return item =>
+        item.Quality += item.SellIn switch
         {
-            item.Quality += item.SellIn switch
-            {
-                < 0 => qualityDelta * 2,
-                _ => qualityDelta
-            };
+            < 0 => qualityDelta * 2,
+            _ => qualityDelta
         };
     }
 }
