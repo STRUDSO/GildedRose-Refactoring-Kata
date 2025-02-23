@@ -20,7 +20,7 @@ public class Any
         return NormalItem(name, quality:80);
     }
 
-    public static Item BackStagePass(int sellIn, int quality)
+    public static Item BackStagePass(int sellIn = 0, int quality = 0)
     {
         const string name = "Backstage passes to a TAFKAL80ETC concert";
         return NormalItem(name, sellIn:sellIn, quality:quality);

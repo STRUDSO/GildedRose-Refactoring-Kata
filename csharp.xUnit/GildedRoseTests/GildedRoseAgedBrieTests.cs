@@ -8,9 +8,10 @@ public class GildedRoseAgedBrieTests
     [Fact]
     public void AgedBrie_WrongName_ShouldSayNo()
     {
-        var handleAgedBrie = GildedRose.HandleAgedBrie(Any.NormalItem());
-
-        Assert.Equal(ProcessingResult.No, handleAgedBrie);
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleAgedBrie(Any.NormalItem()));
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleAgedBrie(Any.Sulfuras()));
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleAgedBrie(Any.BackStagePass()));
+        Assert.Equal(ProcessingResult.Handled, GildedRose.HandleAgedBrie(Any.AgedBrie()));
     }
     [Fact]
     public void AgedBrie_Fresh_ShouldIncreaseInQuality()

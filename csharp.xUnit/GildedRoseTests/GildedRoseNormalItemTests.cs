@@ -6,6 +6,15 @@ namespace GildedRoseTests;
 public class GildedRoseNormalItemTests
 {
     [Fact]
+    public void NormalItem_SpecialItem_ShouldReplyNo()
+    {
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.Sulfuras()));
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.BackStagePass()));
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.AgedBrie()));
+    }
+
+
+    [Fact]
     public void NormalItem_DayPassed_ShouldDecreaseSellIn()
     {
         // Given
