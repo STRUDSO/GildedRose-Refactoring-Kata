@@ -47,7 +47,7 @@ public class GildedRose
 
         if (!(isAgedBrie() || isBackStage()))
         {
-            if (t.Quality > 0)
+            if (0 < t.Quality)
             {
                 t.Quality -= 1;
             }
@@ -99,7 +99,7 @@ public class GildedRose
             }
             else
             {
-                if (t.Quality > 0)
+                if (0 < t.Quality)
                 {
                     t.Quality -= 1;
                 }
