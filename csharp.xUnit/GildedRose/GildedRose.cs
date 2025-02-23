@@ -7,6 +7,11 @@ namespace GildedRoseKata;
 
 public class GildedRose
 {
+    private const string Sulfuras = "Sulfuras, Hand of Ragnaros";
+    private const string Backstage = "Backstage passes to a TAFKAL80ETC concert";
+    private const string AgedBrie = "Aged Brie";
+    private static readonly HashSet<string> SpecialTreatment = [AgedBrie, Sulfuras, Backstage];
+
     private readonly IList<Item> _items;
 
     public GildedRose(IList<Item> items)
@@ -39,8 +44,8 @@ public class GildedRose
             return;
         }
 
-        bool isBackStage = IsNamed(t, "Backstage passes to a TAFKAL80ETC concert");
-        bool isAgedBrie = IsNamed(t, "Aged Brie");
+        bool isBackStage = IsNamed(t, Backstage);
+        bool isAgedBrie = IsNamed(t, AgedBrie);
 
 
         var isRegularItem = !(isAgedBrie || isBackStage);
@@ -111,13 +116,18 @@ public class GildedRose
 
     public static ProcessingResult HandleSulfuras(Item t)
     {
-        return t.Name == "Sulfuras, Hand of Ragnaros" ?
+        return t.Name == Sulfuras ?
             // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
             ProcessingResult.Handled : ProcessingResult.No;
     }
 
     public static ProcessingResult HandleNormalItem(Item t)
     {
+        if (SpecialTreatment.Contains(t.Name))
+        {
+            return ProcessingResult.No;
+        }
+
         t.Quality -= 1;
         t.SellIn -= 1;
 
