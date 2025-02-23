@@ -38,7 +38,7 @@ public class GildedRose
 
     private static void ProcessItem(Item t)
     {
-        List<Func<Item, ProcessingResult>> strategies = [HandleSulfuras];
+        List<Func<Item, ProcessingResult>> strategies = [HandleSulfuras, HandleNormalItem];
         if (strategies.Any(strategy => strategy(t) == ProcessingResult.Handled))
         {
             return;
@@ -48,9 +48,9 @@ public class GildedRose
         bool isAgedBrie = IsNamed(t, AgedBrie);
 
 
-        var isRegularItem = !(isAgedBrie || isBackStage);
+        var isNormalItem = !(isAgedBrie || isBackStage);
 
-        if (isRegularItem)
+        if (isNormalItem)
         {
             if (0 < t.Quality)
             {
@@ -99,7 +99,7 @@ public class GildedRose
             {
                 t.Quality = 0;
             }
-            else if(isRegularItem)
+            else if(isNormalItem)
             {
                 if (0 < t.Quality)
                 {
