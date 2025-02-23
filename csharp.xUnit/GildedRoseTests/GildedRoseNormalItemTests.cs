@@ -3,17 +3,8 @@ using Xunit;
 
 namespace GildedRoseTests;
 
-public abstract class GildedRoseNormalItemTests_NormalItem_Base
+public abstract class GildedRoseSimpleItemTests(int qualityModifier = 1)
 {
-    [Fact]
-    public void SpecialItem_ShouldReplyNo()
-    {
-        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.Sulfuras()));
-        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.BackStagePass()));
-        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.AgedBrie()));
-        Assert.Equal(ProcessingResult.Handled, GildedRose.HandleNormalItem(Any.NormalItem()));
-    }
-
     protected abstract Item CreateItem(int sellIn = 0, int quality = 0);
 
     [Fact]
@@ -24,11 +15,13 @@ public abstract class GildedRoseNormalItemTests_NormalItem_Base
         var item = CreateItem(sellIn);
 
         // When
-        GildedRose.HandleNormalItem(item);
+        Handle(item);
 
         // Then
         Assert.Equal(sellIn - 1, item.SellIn);
     }
+
+    protected abstract void Handle(Item item);
 
     [Fact]
     public void DayPassed_QualityDecreased()
@@ -39,10 +32,10 @@ public abstract class GildedRoseNormalItemTests_NormalItem_Base
         var item = CreateItem(sellIn:sellIn, quality:quality);
 
         // When
-        GildedRose.HandleNormalItem(item);
+        Handle(item);
 
         // Then
-        Assert.Equal(quality - 1, item.Quality);
+        Assert.Equal(quality - 1 * qualityModifier, item.Quality);
     }
 
     [Fact]
@@ -52,7 +45,7 @@ public abstract class GildedRoseNormalItemTests_NormalItem_Base
         var item = CreateItem();
 
         // When
-        GildedRose.HandleNormalItem(item);
+        Handle(item);
 
         // Then
         Assert.Equal(0, item.Quality);
@@ -64,17 +57,44 @@ public abstract class GildedRoseNormalItemTests_NormalItem_Base
         var quality = 10;
         var item = CreateItem(quality: quality);
 
-        GildedRose.HandleNormalItem(item);
+        Handle(item);
 
-        Assert.Equal(quality - 2, item.Quality);
+        Assert.Equal(quality - 2 * qualityModifier, item.Quality);
     }
 }
 
-public class GildedRoseNormalItemTests_NormalItem_ : GildedRoseNormalItemTests_NormalItem_Base
+public class GildedRoseSimpleItemTests_ConjuredItems() : GildedRoseSimpleItemTests(2)
+{
+    protected override Item CreateItem(int sellIn = 0, int quality = 0)
+    {
+        return Any.ConjuredItem(sellIn, quality);
+    }
+
+    protected override void Handle(Item item)
+    {
+        GildedRose.HandleConjuredItem(item);
+    }
+}
+
+public class GildedRoseSimpleItemTest_NormalItems : GildedRoseSimpleItemTests
 {
     protected override Item CreateItem(int sellIn = 0, int quality = 0)
     {
         var item = Any.NormalItem(sellIn:sellIn, quality:quality);
         return item;
+    }
+
+    protected override void Handle(Item item)
+    {
+        GildedRose.HandleNormalItem(item);
+    }
+
+    [Fact]
+    public void Normal_SpecialItem_ShouldReplyNo()
+    {
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.Sulfuras()));
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.BackStagePass()));
+        Assert.Equal(ProcessingResult.No, GildedRose.HandleNormalItem(Any.AgedBrie()));
+        Assert.Equal(ProcessingResult.Handled, GildedRose.HandleNormalItem(Any.NormalItem()));
     }
 }

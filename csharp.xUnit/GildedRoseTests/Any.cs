@@ -25,4 +25,9 @@ public class Any
         const string name = "Backstage passes to a TAFKAL80ETC concert";
         return NormalItem(name, sellIn:sellIn, quality:quality);
     }
+
+    public static Item ConjuredItem(int sellIn = 0, int quality = 0)
+    {
+        return NormalItem("Conjured Mana Cake", sellIn: sellIn, quality: quality);
+    }
 }

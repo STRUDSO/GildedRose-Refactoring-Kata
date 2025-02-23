@@ -66,6 +66,13 @@ public class GildedRose
             QualityDecay(-1));
     }
 
+    public static ProcessingResult HandleConjuredItem(Item item)
+    {
+        return Process(item,
+            () => item.Name == Conjured,
+            QualityDecay(-2));
+    }
+
     public static ProcessingResult HandleAgedBrie(Item item)
     {
         return Process(item,
@@ -110,8 +117,8 @@ public class GildedRose
         }
 
         Action<Item>[] pipeline = [SellIn, qualityDecay, EnsureQualityIsInRange];
-        foreach (var q in pipeline)
-            q(item);
+        foreach (var act in pipeline)
+            act(item);
         return ProcessingResult.Handled;
     }
     private static void SellIn(Item item)
