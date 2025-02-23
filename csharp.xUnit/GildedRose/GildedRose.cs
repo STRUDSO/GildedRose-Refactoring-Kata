@@ -61,11 +61,11 @@ public class GildedRose
 
     private static ProcessingResult Process(Item item, Action<Item> normalQuality)
     {
-        SellIn(item);
+        Apply(SellIn, item);
 
         Apply(normalQuality, item);
 
-        EnsureQualityIsInRange(item);
+        Apply(EnsureQualityIsInRange, item);
 
         return ProcessingResult.Handled;
     }
