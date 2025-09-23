@@ -22,3 +22,13 @@ GildedRose/bin/Debug/net8.0/GildedRose 10
 ``` cmd
 dotnet test
 ```
+
+### Run stryker mutation testing
+
+First make the tests green, you can do this by removing the test case foo or fixing it
+
+``` cmd
+dotnet tool restore
+dotnet stryker -o
+
+```
