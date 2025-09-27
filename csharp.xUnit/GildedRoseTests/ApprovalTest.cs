@@ -1,10 +1,8 @@
-﻿using GildedRoseKata;
-
-using System;
-using System.IO;
-using System.Text;
+﻿using System.Collections.Generic;
+using GildedRoseKata;
+using System.Linq;
 using System.Threading.Tasks;
-
+using VerifyTests;
 using VerifyXunit;
 
 using Xunit;
@@ -16,23 +14,20 @@ public class ApprovalTest
     [Fact]
     public Task Foo()
     {
-        Item[] items = { new Item { Name = "foo", SellIn = 0, Quality = 0 } };
+        var verifySettings = new VerifySettings();
+        //verifySettings.AutoVerify(true, false);
+        IEnumerable<string> name = ["Foo", "Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros"];
+        IEnumerable<int> sellin = [-1, 0, 1, 5,6, 7, 10, 11, 12, 42];
+        IEnumerable<int> quality = [-1, 0, 1, 49, 50, 51];
+        return Verifier.Combination(settings: verifySettings)
+            .Verify(Act, name, sellin, quality);
+    }
+
+    private static Item Act(string name, int sellIn, int quality)
+    {
+        Item[] items = [new() { Name = name, SellIn = sellIn, Quality = quality }];
         GildedRose app = new GildedRose(items);
         app.UpdateQuality();
-        
-        return Verifier.Verify(items);
-    }
-    
-    [Fact]
-    public Task ThirtyDays()
-    {
-        var fakeoutput = new StringBuilder();
-        Console.SetOut(new StringWriter(fakeoutput));
-        Console.SetIn(new StringReader($"a{Environment.NewLine}"));
-
-        Program.Main(new string[] { "30" });
-        var output = fakeoutput.ToString();
-
-        return Verifier.Verify(output);
+        return items.First();
     }
 }
