@@ -18,6 +18,11 @@ public class Item
         "Sulfuras, Hand of Ragnaros" => new SulfurasUpdater(),
         _ => new OtherUpdater()
     };
+
+    public string ToBijson()
+    {
+        return $"{{n: {Name}, q: {Quality}, s: {SellIn}}}";
+    }
 }
 
 public class AgedBrieUpdater : IUpdateQuality

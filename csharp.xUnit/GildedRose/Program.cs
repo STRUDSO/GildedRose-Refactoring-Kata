@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GildedRoseKata;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         Console.WriteLine("OMGHAI!");
 
@@ -55,7 +56,7 @@ public class Program
                 Console.WriteLine(items[j].Name + ", " + items[j].SellIn + ", " + items[j].Quality);
             }
             Console.WriteLine("");
-            app.UpdateQuality();
+            await app.UpdateQuality();
         }
     }
 }
