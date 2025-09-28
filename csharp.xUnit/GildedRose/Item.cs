@@ -1,4 +1,7 @@
-﻿namespace GildedRoseKata;
+﻿using System;
+using System.Collections.Generic;
+
+namespace GildedRoseKata;
 
 public class Item
 {
@@ -6,20 +9,21 @@ public class Item
     public int SellIn { get; set; }
     public int Quality { get; set; }
 
+    private Dictionary<string, Action> actions;
+
+    public Item()
+    {
+        actions = new()
+        {
+            {"Sulfuras, Hand of Ragnaros", DoSulf},
+            {"Backstage passes to a TAFKAL80ETC concert", DoBackStage},
+            {"Aged Brie", DoAgedBrie},
+        };
+    }
+
     public void Process()
     {
-        var isAgedBrie = Name == "Aged Brie";
-        var isBackstage = Name == "Backstage passes to a TAFKAL80ETC concert";
-        var isSulf = Name == "Sulfuras, Hand of Ragnaros";
-
-        if(isAgedBrie)
-            DoAgedBrie();
-        else if (isBackstage)
-            DoBackStage();
-        else if (isSulf)
-            DoSulf();
-        else
-            Other();
+        actions.GetValueOrDefault(Name, Other)();
     }
 
     private void Other()
