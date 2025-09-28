@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace GildedRoseKata;
+﻿namespace GildedRoseKata;
 
 public class Item
 {
@@ -9,79 +6,92 @@ public class Item
     public int SellIn { get; set; }
     public int Quality { get; set; }
 
-    private Dictionary<string, Action> actions;
-
-    public Item()
-    {
-        actions = new()
-        {
-            {"Sulfuras, Hand of Ragnaros", DoSulf},
-            {"Backstage passes to a TAFKAL80ETC concert", DoBackStage},
-            {"Aged Brie", DoAgedBrie},
-        };
-    }
-
     public void Process()
     {
-        actions.GetValueOrDefault(Name, Other)();
+        GetUpdater().UpdateQuality(this);
     }
 
-    private void Other()
+    private IUpdateQuality GetUpdater() => Name switch
     {
-        if (Quality > 0)
+        "Aged Brie" => new AgedBrieUpdater(),
+        "Backstage passes to a TAFKAL80ETC concert" => new BackStageUpdater(),
+        "Sulfuras, Hand of Ragnaros" => new SulfurasUpdater(),
+        _ => new OtherUpdater()
+    };
+}
+
+public class AgedBrieUpdater : IUpdateQuality
+{
+    public void UpdateQuality(Item item)
+    {
+        if (item.Quality < 50)
         {
-            Quality -= 1;
+            item.Quality += 1;
         }
 
-        SellIn -= 1;
+        item.SellIn -= 1;
 
-        if (SellIn < 0 && Quality > 0)
+        if (item.SellIn < 0 && item.Quality < 50)
         {
-            Quality -= 1;
+            item.Quality += 1;
         }
     }
+}
 
-    private void DoSulf()
+public class BackStageUpdater : IUpdateQuality
+{
+    public void UpdateQuality(Item item)
     {
-    }
-
-    private void DoBackStage()
-    {
-        if (Quality < 50)
+        if (item.Quality < 50)
         {
-            Quality += 1;
+            item.Quality += 1;
 
-            if (SellIn < 11 && Quality < 50)
+            if (item.SellIn < 11 && item.Quality < 50)
             {
-                Quality += 1;
+                item.Quality += 1;
             }
 
-            if (SellIn < 6 && Quality < 50)
+            if (item.SellIn < 6 && item.Quality < 50)
             {
-                Quality += 1;
+                item.Quality += 1;
             }
         }
 
-        SellIn -= 1;
+        item.SellIn -= 1;
 
-        if (SellIn < 0)
+        if (item.SellIn < 0)
         {
-            Quality = 0;
+            item.Quality = 0;
         }
     }
+}
 
-    private void DoAgedBrie()
+public class SulfurasUpdater : IUpdateQuality
+{
+    public void UpdateQuality(Item item)
     {
-        if (Quality < 50)
+    }
+}
+
+public interface IUpdateQuality
+{
+    void UpdateQuality(Item item);
+}
+
+public class OtherUpdater : IUpdateQuality
+{
+    public void UpdateQuality(Item item)
+    {
+        if (item.Quality > 0)
         {
-            Quality += 1;
+            item.Quality -= 1;
         }
 
-        SellIn -= 1;
+        item.SellIn -= 1;
 
-        if (SellIn < 0 && Quality < 50)
+        if (item.SellIn < 0 && item.Quality > 0)
         {
-            Quality += 1;
+            item.Quality -= 1;
         }
     }
 }
