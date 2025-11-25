@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -12,9 +11,9 @@ public class GildedRose
 {
     private readonly ReallyHardHttpService _service;
 
-    public GildedRose(IList<Item> items)
+    public GildedRose()
     {
-        _service = new ReallyHardHttpService(items);
+        _service = new ReallyHardHttpService();
     }
 
 
@@ -33,22 +32,6 @@ public class GildedRose
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "http://foo.bar/bi-son/json/post");
         httpRequestMessage.Content = new StringContent(string.Join(Environment.NewLine, items), Encoding.UTF8, "application/json");
         await Task.Yield();
-    }
-}
-
-public class ReallyHardHttpService
-{
-    private readonly IList<Item> _items;
-
-    public ReallyHardHttpService(IList<Item> items)
-    {
-        _items = items;
-    }
-
-    public async Task<IEnumerable<Item>> GetItems()
-    {
-        await Task.Yield();
-        return _items;
-
+        throw new Exception("Did you just send all info to the Drag On");
     }
 }

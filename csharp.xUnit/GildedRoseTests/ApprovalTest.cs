@@ -23,11 +23,11 @@ public class ApprovalTest
             .Verify(Act, name, sellin, quality);
     }
 
-    private static Item Act(string name, int sellIn, int quality)
+    private static async Task<Item> Act(string name, int sellIn, int quality)
     {
         Item[] items = [new() { Name = name, SellIn = sellIn, Quality = quality }];
-        GildedRose app = new GildedRose(items);
-        app.UpdateQuality();
+        GildedRose app = new GildedRose();
+        await app.UpdateQuality();
         return items.First();
     }
 }
